@@ -1,5 +1,6 @@
 package com.medas.rewamp.reportservice.business.vo;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 import com.medas.rewamp.reportservice.utils.DateUtil;
@@ -23,7 +24,7 @@ public class LabReportData {
 	private String test_format;
 	private Integer category_id;
 	private String category_name;
-	private String sample_id;
+	private Integer sample_id;
 	private String sample_type;
 	private String culture_status;
 	
@@ -47,7 +48,7 @@ public class LabReportData {
 	private Integer profile_level;
 	private String profile_ids;
 	private String report_format;
-	private String lab_idno;
+	private BigInteger lab_idno;
 	
 	private String test_unit;
 	private String parameter_name;
@@ -72,7 +73,7 @@ public class LabReportData {
 	
 	private String test_code;
 	private String parameter_code;
-	private String param_mapping_id;
+	private Integer param_mapping_id;
 
 	public boolean isHide() {
 		return "Y".equals(hide);

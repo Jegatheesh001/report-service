@@ -1,16 +1,17 @@
-package com.medas.rewamp.reportservice.format;
+package eclinic.laboratory.presentation.action.reports.iface.impl;
 
+import static com.medas.rewamp.reportservice.utils.ItextPdfCellFactory.getCellForReport;
+import static com.medas.rewamp.reportservice.utils.ItextPdfCellFactory.getNoBorderCell;
+import static com.medas.rewamp.reportservice.utils.ItextPdfCellFactory.getPhrase;
+import static com.medas.rewamp.reportservice.utils.ItextPdfCellFactory.lineBreak;
+import static com.medas.rewamp.reportservice.utils.ItextPdfCellFactory.setBorderWidth;
 import static com.medas.rewamp.reportservice.utils.StringUtils.isEmpty;
-import static com.medas.rewamp.reportservice.utils.ItextPdfCellFactory.*;
 
 import java.io.Reader;
 import java.io.StringReader;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -32,8 +33,10 @@ import com.medas.rewamp.reportservice.business.vo.LabReportData;
 import com.medas.rewamp.reportservice.business.vo.OfficeLetterHeadBean;
 import com.medas.rewamp.reportservice.business.vo.RegistrationBean;
 import com.medas.rewamp.reportservice.business.vo.UserBean;
+import com.medas.rewamp.reportservice.format.TestReportFormat;
 import com.medas.rewamp.reportservice.service.LabReportService;
 import com.medas.rewamp.reportservice.utils.BarcodePdf;
+import com.medas.rewamp.reportservice.utils.ReportHolder;
 
 /**
  * @author Jegatheesh <br>
@@ -51,8 +54,8 @@ public class CommonTestReportFormat implements TestReportFormat {
 	private BarcodePdf barcodeService;
 	
 	@Override
-	public PdfPTable getHeaderTable(HttpServletRequest request) throws Exception {
-		RegistrationBean registrationBean = (RegistrationBean) request.getAttribute("headerDetails");
+	public PdfPTable getHeaderTable() throws Exception {
+		RegistrationBean registrationBean = ReportHolder.getAttribute("headerDetails", RegistrationBean.class);
 		if(registrationBean == null) {
 			return null;
 		}
@@ -61,8 +64,8 @@ public class CommonTestReportFormat implements TestReportFormat {
 		Image img = null;
 		Image img1 = null;
 
-		OfficeLetterHeadBean officeLetterHeadBean = (OfficeLetterHeadBean) request.getAttribute("officeLetterHeadBean");
-		path = (String) request.getAttribute("imagePath");
+		OfficeLetterHeadBean officeLetterHeadBean = ReportHolder.getAttribute("officeLetterHeadBean", OfficeLetterHeadBean.class);
+		path = ReportHolder.getAttribute("imagePath");
 		PdfPTable blankdatatable = new PdfPTable(8);
 		int[] headerwidths = { 13, 1, 20, 21, 15, 2, 15, 20 };
 		blankdatatable.setWidths(headerwidths);
@@ -419,9 +422,9 @@ public class CommonTestReportFormat implements TestReportFormat {
 	}
 	
 	@Override
-	public PdfPTable getFormatHeader(String format, HttpServletRequest request) throws Exception {
+	public PdfPTable getFormatHeader(String format) throws Exception {
 		if("1".equals(format)) {
-			return getFormatOneHeader(request);
+			return getFormatOneHeader();
 		} else if("2".equals(format)) {
 			return getFormatTwoHeader();
 		}
@@ -429,7 +432,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 	}
 
 	@Override
-	public PdfPTable getFormatOneHeader(HttpServletRequest request) throws Exception {
+	public PdfPTable getFormatOneHeader() throws Exception {
 		PdfPTable blankdatatable = new PdfPTable(5);
 		int[] headerwidths = { 30, 17, 15, 25, 13 };
 		blankdatatable.setWidths(headerwidths);
@@ -494,7 +497,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 	}
 
 	@Override
-	public PdfPTable getFormatOneData(HttpServletRequest request, List<LabReportData> dataList) throws Exception {
+	public PdfPTable getFormatOneData(List<LabReportData> dataList) throws Exception {
 		PdfPTable blankdatatable = new PdfPTable(5);
 		int[] headerwidths = { 30, 17, 15, 25, 13 };
 		try {
@@ -505,11 +508,11 @@ public class CommonTestReportFormat implements TestReportFormat {
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
-		return getFormatOneData(request, dataList, blankdatatable);
+		return getFormatOneData(dataList, blankdatatable);
 	}
 
 	@Override
-	public PdfPTable getFormatOneData(HttpServletRequest request, List<LabReportData> dataList, PdfPTable blankdatatable) throws Exception {
+	public PdfPTable getFormatOneData(List<LabReportData> dataList, PdfPTable blankdatatable) throws Exception {
 		float fontSize = 9.0F;
 		float fixedLeading = 10;
 		PdfPCell cell = null;
@@ -541,9 +544,9 @@ public class CommonTestReportFormat implements TestReportFormat {
 			cell.setVerticalAlignment(0);
 			blankdatatable.addCell(cell);
 			if(testResult.isBold())
-				cell = getCellForReport(getTestResult(request, testResult, FontFactory.getFont("Helvetica-Bold", fontSize)), fixedLeading);
+				cell = getCellForReport(getTestResult(testResult, FontFactory.getFont("Helvetica-Bold", fontSize)), fixedLeading);
 			else
-				cell = getCellForReport(getTestResult(request, testResult, FontFactory.getFont("Helvetica", fontSize)), fixedLeading);
+				cell = getCellForReport(getTestResult(testResult, FontFactory.getFont("Helvetica", fontSize)), fixedLeading);
 			cell.setBorder(0);
 			cell.setHorizontalAlignment(0);
 			cell.setVerticalAlignment(0);
@@ -567,7 +570,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 		return blankdatatable;
 	}
 	
-	public Paragraph getTestResult(HttpServletRequest request, LabReportData testResult, Font font) {
+	public Paragraph getTestResult(LabReportData testResult, Font font) {
 		Paragraph para = null, temp = null;
 		boolean numeric = false;
 		double result = 0.0, min = 0.0, max = 0.0;
@@ -647,7 +650,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 					
 				}
 				para.add(ck);
-				temp = criticalValueCheck(request, testResult, font);
+				temp = criticalValueCheck(testResult, font);
 				if (temp != null) {
 					para.add(temp);
 				}
@@ -684,7 +687,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 
 			abnormBean.setLis_parameter_code(testResult.getParameter_code());
 			
-			ArrayList<RegistrationBean> abnormalTestList = reportService.getAllAbnormalResults(abnormBean);
+			List<RegistrationBean> abnormalTestList = reportService.getAllAbnormalResults(abnormBean);
 			
 			if (abnormalTestList != null && abnormalTestList.size() > 0) {
 				for(RegistrationBean regBean1 : abnormalTestList) {
@@ -735,8 +738,8 @@ public class CommonTestReportFormat implements TestReportFormat {
 	 * @param font
 	 * @return
 	 */
-	private Paragraph criticalValueCheck(HttpServletRequest request, LabReportData testResult, Font font) {
-		RegistrationBean header = (RegistrationBean) request.getAttribute("headerDetails");
+	private Paragraph criticalValueCheck(LabReportData testResult, Font font) {
+		RegistrationBean header = ReportHolder.getAttribute("headerDetails", RegistrationBean.class);
 		int age = header.getAge();
 		String sex = header.getSex();
 		String reference_id = reportService.getReferenceRangeId(String.valueOf(testResult.getParam_mapping_id()), age);
@@ -761,7 +764,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 	}
 
 	@Override
-	public PdfPTable getFormatTwoData(HttpServletRequest request, List<LabReportData> dataList) throws Exception {
+	public PdfPTable getFormatTwoData(List<LabReportData> dataList) throws Exception {
 		PdfPTable blankdatatable = new PdfPTable(2);
 		int[] headerwidths = { 40, 60 };
 		try {
@@ -813,7 +816,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 		// Highlighting abnormal results
 		RegistrationBean abnormBean = new RegistrationBean();
 		abnormBean.setLis_test_code(testDetails.getTest_code());
-    	ArrayList<RegistrationBean> abnormalTestList = reportService.getAllAbnormalResults(abnormBean);
+		List<RegistrationBean> abnormalTestList = reportService.getAllAbnormalResults(abnormBean);
     	String remarks = testDetails.getRemarks();
 		if (remarks != null && !remarks.trim().equals("null")) {
 			if (abnormalTestList != null && !abnormalTestList.isEmpty()) {
@@ -846,8 +849,8 @@ public class CommonTestReportFormat implements TestReportFormat {
 	}
 
 	@Override
-	public PdfPTable getFooterTable(HttpServletRequest request) throws Exception {
-		OfficeLetterHeadBean officeLetterHeadBean = (OfficeLetterHeadBean) request.getAttribute("officeLetterHeadBean");
+	public PdfPTable getFooterTable() throws Exception {
+		OfficeLetterHeadBean officeLetterHeadBean = ReportHolder.getAttribute("officeLetterHeadBean", OfficeLetterHeadBean.class);
 		PdfPTable footerTable = new PdfPTable(new float[] {20, 55, 25});
 		footerTable.setWidthPercentage(100f);
 		footerTable.setTotalWidth(100f);
@@ -862,18 +865,18 @@ public class CommonTestReportFormat implements TestReportFormat {
 		footerTable.addCell(contentCell);
 		
 		 /************************************First Section**************************************************************/
-		UserBean pathologist = (UserBean) request.getAttribute("pathologist");
+		UserBean pathologist = ReportHolder.getAttribute("pathologist", UserBean.class);
 		if(pathologist == null) {
 			pathologist = new UserBean();
 		}
-		UserBean authUser = (UserBean) request.getAttribute("authUser");
+		UserBean authUser = ReportHolder.getAttribute("authUser", UserBean.class);
 		boolean sameUser = false;
 		if (authUser != null && authUser.getUser_id().equals(pathologist.getUser_id())) {
 			authUser = null;
 			sameUser = true;
 		}
 		
-		String path = (String) request.getAttribute("imagePath");
+		String path = ReportHolder.getAttribute("imagePath");
 		String fname = null;
 		// Only if pathologist authenticate the report
 		if (sameUser) {
@@ -962,7 +965,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 		}
 		footerTable.addCell(getNoBorderCell(left));
 		
-		LabReportData registrationBean = (LabReportData) request.getAttribute("footerDetails");
+		LabReportData registrationBean = ReportHolder.getAttribute("footerDetails", LabReportData.class);
 		PdfPTable middle = new PdfPTable(2);
 		middle.setWidthPercentage(100f);
 		middle.setTotalWidth(100f);
@@ -1114,8 +1117,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 		blankdatatable.setWidthPercentage(100f);
 		blankdatatable.setTotalWidth(100f);
 
-		PdfPCell cell = new PdfPCell();
-		cell = getNoBorderCell(getPhrase("Remarks:", FontFactory.getFont("Helvetica", 10.0F)), 10);
+		PdfPCell cell = getNoBorderCell(getPhrase("Remarks:", FontFactory.getFont("Helvetica", 10.0F)), 10);
 		cell.setHorizontalAlignment(alignLeft);
 		cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 		blankdatatable.addCell(cell);

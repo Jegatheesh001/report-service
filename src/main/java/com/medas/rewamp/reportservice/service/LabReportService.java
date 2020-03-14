@@ -1,8 +1,8 @@
 package com.medas.rewamp.reportservice.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.medas.rewamp.reportservice.business.vo.LabReportData;
@@ -10,126 +10,107 @@ import com.medas.rewamp.reportservice.business.vo.OfficeLetterHeadBean;
 import com.medas.rewamp.reportservice.business.vo.QueryParam;
 import com.medas.rewamp.reportservice.business.vo.RegistrationBean;
 import com.medas.rewamp.reportservice.business.vo.UserBean;
+import com.medas.rewamp.reportservice.persistence.LabReportDao;
 
 @Service
 public class LabReportService {
+	
+	@Autowired
+	private LabReportDao dao;
 
 	public OfficeLetterHeadBean getOfficeLetterHead(Integer officeId) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getOfficeLetterHead(officeId);
 	}
 
 	public String getTestDetailsIdsByCriteria(LabReportData params) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getTestDetailsIdsByCriteria(params);
 	}
 
 	public List<LabReportData> getLabtestDetailsForReport(LabReportData params) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getLabtestDetailsForReport(params);
 	}
 
 	public List<LabReportData> getLabtestResultsForReport(LabReportData params) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getLabtestResultsForReport(params);
 	}
 
 	public String getClinicReportFormat(String clinicId) {
-		// TODO Auto-generated method stub
-		return clinicId;
+		return dao.getClinicReportFormat(clinicId);
 	}
 
 	public List<LabReportData> getProfileTestsTree(LabReportData params) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getProfileTestsTree(params);
 	}
 
 	public List<LabReportData> getTestBasicDetails(LabReportData params) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getTestBasicDetails(params);
 	}
 
 	public List<LabReportData> getLabtestDetailsForReportProfile(LabReportData params) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getLabtestDetailsForReportProfile(params);
 	}
 
-	public List<LabReportData> getProfileOrderByTestDetails(LabReportData param) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<LabReportData> getProfileOrderByTestDetails(LabReportData params) {
+		return dao.getProfileOrderByTestDetails(params);
 	}
 
 	public UserBean getUserDetailByUserID(String userId) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getUserDetailByUserID(userId);
 	}
 
 	public String getReportClassForClinic(QueryParam param) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getReportClassForClinic(param);
 	}
 
-	public ArrayList<RegistrationBean> getAntibioAndOrganisms(RegistrationBean registrationBean) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<RegistrationBean> getAntibioAndOrganisms(RegistrationBean registrationBean) {
+		return dao.getAntibioAndOrganisms(registrationBean);
 	}
 
 	public RegistrationBean getTestDetailsById(RegistrationBean registrationBean) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getTestDetailsById(registrationBean);
+	}
+
+	public RegistrationBean getReferDoctorById(RegistrationBean setBean) {
+		return dao.getReferDoctorById(setBean);
+	}
+
+	public RegistrationBean getClinicById(String clinic_id) {
+		return dao.getClinicById(clinic_id);
 	}
 
 	public String getMicroTestRemarks(String lab_idno) {
 		// fetchValueWithSingleParam("micro_test_remarks", "remarks", "lab_idno", lab_idno, null, null);
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getMicroTestRemarks(lab_idno);
 	}
 
 	public String isDepartmentLab(Integer Department_id) {
 		// fetchValueWithSingleParam("department_setup", "dept_lab", "department_id", registrationBean.getDepartment_id(), null, null)
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public RegistrationBean getReferDoctorById(RegistrationBean setBeanRef) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public RegistrationBean getClinicById(String clinic_id) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.isDepartmentLab(Department_id);
 	}
 
 	public String getPathologistByOffice(Integer office_id) {
 		// common.fetchValueWithSingleParam("doctors_office", "doctors_id", "office_id", registrationBean.getOffice_id(), null, " doctors_office.lab_pathologist='Y'");
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getPathologistByOffice(office_id);
 	}
 
-	public ArrayList<RegistrationBean> getAllAbnormalResults(RegistrationBean abnormBean) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<RegistrationBean> getAllAbnormalResults(RegistrationBean abnormBean) {
+		return dao.getAllAbnormalResults(abnormBean);
 	}
 
-	public String getReferenceRangeId(String valueOf, int age) {
-		// TODO Auto-generated method stub
-		return null;
+	public String getReferenceRangeId(String valueOf, Integer age) {
+		return dao.getReferenceRangeId(valueOf, age);
 	}
 
 	public String getMappedResultsetGender(String reference_id) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getMappedResultsetGender(reference_id);
 	}
 
 	public String getMappedResultsetValue(String reference_id, String sexType, Double result) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getMappedResultsetValue(reference_id, sexType, result);
 	}
 
-	public ArrayList<RegistrationBean> getOrganismNames(RegistrationBean regiBean) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<RegistrationBean> getOrganismNames(RegistrationBean regBean) {
+		return dao.getOrganismNames(regBean);
 	}
 
 }

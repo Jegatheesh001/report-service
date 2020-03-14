@@ -1,5 +1,6 @@
 package com.medas.rewamp.reportservice.business.vo;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 import lombok.Data;
@@ -56,4 +57,8 @@ public class RegistrationBean {
 	private String antibiotic_id;
 	private String antibiotic_name;
 	private String sensitivity;
+	
+	public void setLab_idno(BigInteger lab_idno) {
+		this.lab_idno = String.valueOf(lab_idno);
+	}
 }

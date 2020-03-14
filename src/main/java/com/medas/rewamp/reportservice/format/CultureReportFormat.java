@@ -1,6 +1,6 @@
 package com.medas.rewamp.reportservice.format;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +11,8 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.medas.rewamp.reportservice.business.vo.RegistrationBean;
+
+import eclinic.laboratory.presentation.action.reports.iface.impl.CommonCultureReportFormatTwo;
 
 public interface CultureReportFormat {
 	
@@ -32,12 +34,12 @@ public interface CultureReportFormat {
 	
 	int alignLeft = Element.ALIGN_LEFT, alignRight = Element.ALIGN_RIGHT, alignCenter = Element.ALIGN_CENTER;
 	
-	public PdfPTable printFormatTwoResult(ArrayList<RegistrationBean> list, RegistrationBean regiBean) throws Exception;
-	public PdfPTable printFormatOneReport(ArrayList<RegistrationBean> list, String lname) throws Exception;
+	public PdfPTable printFormatTwoResult(List<RegistrationBean> list, RegistrationBean regiBean) throws Exception;
+	public PdfPTable printFormatOneReport(List<RegistrationBean> list, String lname) throws Exception;
 	public PdfPTable printProfileName(String profileName) throws Exception;
 	public PdfPTable getDataTable4AntibioAndOrganismNames(RegistrationBean regiBean) throws Exception;
-	public PdfPTable printOrganismAndAntibiotic(ArrayList<RegistrationBean> list, RegistrationBean regiBean) throws Exception;
-	public PdfPTable printSensitivity(ArrayList<RegistrationBean> list) throws Exception;
+	public PdfPTable printOrganismAndAntibiotic(List<RegistrationBean> list, RegistrationBean regiBean) throws Exception;
+	public PdfPTable printSensitivity(List<RegistrationBean> list) throws Exception;
 	public PdfPTable printRemarks(String remarks) throws Exception;
 	public PdfPTable getBlankLine(float fixedLeading) throws Exception;
 	

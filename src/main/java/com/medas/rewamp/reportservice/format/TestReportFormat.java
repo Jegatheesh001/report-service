@@ -15,6 +15,8 @@ import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.medas.rewamp.reportservice.business.vo.LabReportData;
 
+import eclinic.laboratory.presentation.action.reports.iface.impl.CommonTestReportFormat;
+
 /**
  * @author Jegatheesh <br>
  *         Created on 2019-06-27
@@ -39,7 +41,7 @@ public interface TestReportFormat {
 
 	int alignLeft = Element.ALIGN_LEFT, alignRight = Element.ALIGN_RIGHT, alignCenter = Element.ALIGN_CENTER;
 	
-	public PdfPTable getHeaderTable(HttpServletRequest request) throws Exception;
+	public PdfPTable getHeaderTable() throws Exception;
 
 	public PdfPTable getProfileName(String profileName, boolean underline) throws Exception;
 
@@ -49,15 +51,13 @@ public interface TestReportFormat {
 
 	public PdfPTable getSampleType(String sampleType) throws Exception;
 
-	public PdfPTable getFormatHeader(String format, HttpServletRequest request) throws Exception;
-	
-	public PdfPTable getFormatOneHeader(HttpServletRequest request) throws Exception;
-
+	public PdfPTable getFormatHeader(String format) throws Exception;
+	public PdfPTable getFormatOneHeader() throws Exception;
 	public PdfPTable getFormatTwoHeader() throws Exception;
 
-	public PdfPTable getFormatOneData(HttpServletRequest request, List<LabReportData> list) throws Exception;
-	public PdfPTable getFormatOneData(HttpServletRequest request, List<LabReportData> list, PdfPTable table) throws Exception;
-	public PdfPTable getFormatTwoData(HttpServletRequest request, List<LabReportData> list) throws Exception;
+	public PdfPTable getFormatOneData(List<LabReportData> list) throws Exception;
+	public PdfPTable getFormatOneData(List<LabReportData> list, PdfPTable table) throws Exception;
+	public PdfPTable getFormatTwoData(List<LabReportData> list) throws Exception;
 
 	public void getFormatThreeData(Document document, LabReportData testDetails) throws Exception;
 	
@@ -65,7 +65,7 @@ public interface TestReportFormat {
 	
 	public void setNotes(Document document, String notes) throws Exception;
 	
-	public PdfPTable getFooterTable(HttpServletRequest request) throws Exception;
+	public PdfPTable getFooterTable() throws Exception;
 	
 	@SuppressWarnings("unchecked")
 	public static TestReportFormat getReportClass(String reportImplementationClass) {

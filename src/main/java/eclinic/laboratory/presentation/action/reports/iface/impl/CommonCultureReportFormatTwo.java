@@ -1,8 +1,7 @@
-package com.medas.rewamp.reportservice.format;
+package eclinic.laboratory.presentation.action.reports.iface.impl;
 
 import static com.medas.rewamp.reportservice.utils.ItextPdfCellFactory.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -18,6 +17,7 @@ import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.medas.rewamp.reportservice.business.vo.RegistrationBean;
+import com.medas.rewamp.reportservice.format.CultureReportFormat;
 import com.medas.rewamp.reportservice.service.LabReportService;
 import com.medas.rewamp.reportservice.utils.ItextPdfCellFactory;
 
@@ -27,7 +27,7 @@ public class CommonCultureReportFormatTwo  implements CultureReportFormat {
 	private LabReportService reportService;
 	
 	@Override
-	public PdfPTable printFormatTwoResult(ArrayList<RegistrationBean> list, RegistrationBean regiBean) throws Exception {
+	public PdfPTable printFormatTwoResult(List<RegistrationBean> list, RegistrationBean regiBean) throws Exception {
 		PdfPTable blankdatatable = new PdfPTable(2);
 		int headerwidths[] = { 25, 75 };
 		blankdatatable.setWidths(headerwidths);
@@ -69,7 +69,7 @@ public class CommonCultureReportFormatTwo  implements CultureReportFormat {
 	}
 
 	@Override
-	public PdfPTable printFormatOneReport(ArrayList<RegistrationBean> list, String lname) throws Exception {
+	public PdfPTable printFormatOneReport(List<RegistrationBean> list, String lname) throws Exception {
 		PdfPTable blankdatatable = new PdfPTable(4);
 		int headerwidths[] = { 30, 25, 25,20 };
 		blankdatatable.setWidths(headerwidths);
@@ -114,7 +114,7 @@ public class CommonCultureReportFormatTwo  implements CultureReportFormat {
 	
 	@Override
 	public PdfPTable getDataTable4AntibioAndOrganismNames(RegistrationBean regiBean) throws Exception {
-		ArrayList<RegistrationBean> orgNameList = reportService.getOrganismNames(regiBean);
+		List<RegistrationBean> orgNameList = reportService.getOrganismNames(regiBean);
 		PdfPTable blankdatatable = new PdfPTable(2);
 		int[] headerwidths = { 25, 75 };
 		blankdatatable.setWidths(headerwidths);
@@ -145,8 +145,8 @@ public class CommonCultureReportFormatTwo  implements CultureReportFormat {
 	}
 
 	@Override
-	public PdfPTable printOrganismAndAntibiotic(ArrayList<RegistrationBean> list, RegistrationBean regiBean) throws Exception {
-		ArrayList<RegistrationBean> orgNameList = reportService.getOrganismNames(regiBean);
+	public PdfPTable printOrganismAndAntibiotic(List<RegistrationBean> list, RegistrationBean regiBean) throws Exception {
+		List<RegistrationBean> orgNameList = reportService.getOrganismNames(regiBean);
 		PdfPTable blankdatatable = new PdfPTable(orgNameList.size() + 1);
 		blankdatatable.setWidthPercentage(100f);
 		blankdatatable.setTotalWidth(100.0F);
@@ -224,7 +224,7 @@ public class CommonCultureReportFormatTwo  implements CultureReportFormat {
 	}
 
 	@Override
-	public PdfPTable printSensitivity(ArrayList<RegistrationBean> list) throws Exception {
+	public PdfPTable printSensitivity(List<RegistrationBean> list) throws Exception {
 		// LabReportsFormatClinic report = new LabReportsFormatClinic();
 		// report.getSensitivityTable(list)
 		return null;
