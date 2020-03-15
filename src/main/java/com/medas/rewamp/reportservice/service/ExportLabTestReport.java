@@ -159,11 +159,11 @@ public class ExportLabTestReport implements PdfPageEvent {
 		}
 		ReportHolder.setAttribute("officeLetterHeadBean", officeLetterHeadBean);
 		format = TestReportFormat.getReportClass(officeLetterHeadBean.getReport_class());
-		String clinicId = testList.get(0).getClinic_id();
-		if (clinicId != null && !clinicId.equals("")) {
+		Integer clinicId = testList.get(0).getClinic_id();
+		if (clinicId != null && clinicId != 0) {
 			String clinicReportFormat = reportService.getClinicReportFormat(clinicId);
-		    if(clinicReportFormat!=null && !clinicReportFormat.equals(""))
-		    	format=TestReportFormat.getReportClass(clinicReportFormat);
+			if (clinicReportFormat != null && !clinicReportFormat.equals(""))
+				format = TestReportFormat.getReportClass(clinicReportFormat);
 		}
 		
 		// Filtering normal and profile tests
@@ -713,7 +713,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 	private CultureReportFormat getCultureReportClass(RegistrationBean header, LabReportData test) {
 		QueryParam param = new QueryParam();
 		param.setId(test.getTest_id());
-		param.setOfficeId(Integer.parseInt(header.getClinic_id()));
+		param.setOfficeId(header.getClinic_id());
 		String impl = reportService.getReportClassForClinic(param);
 		return impl == null ? new CommonCultureReportFormatTwo() : CultureReportFormat.getReportClass(impl);
 	}
@@ -818,9 +818,9 @@ public class ExportLabTestReport implements PdfPageEvent {
 			ReportHolder.setAttribute("footerDetails", new LabReportData());
 			UserBean doc = null;
 			if (registrationBean.getOffice_id() != null) {
-				String userId = reportService.getPathologistByOffice(registrationBean.getOffice_id());
+				Integer userId = reportService.getPathologistByOffice(registrationBean.getOffice_id());
 				if (userId != null) {
-					doc = reportService.getUserDetailByUserID(userId);
+					doc = reportService.getUserDetailByUserID(userId.toString());
 				}
 			}
 			ReportHolder.setAttribute("pathologist", doc);
@@ -1020,7 +1020,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 	public void onCloseDocument(PdfWriter writer, Document document) {
 		this.tpl.beginText();
 		this.tpl.setFontAndSize(this.bf, fontSize);
-		this.tpl.showText(String.valueOf(writer.getPageNumber() - 1));
+		this.tpl.showText(String.valueOf(writer.getPageNumber()));
 		this.tpl.endText();
 	}
 	

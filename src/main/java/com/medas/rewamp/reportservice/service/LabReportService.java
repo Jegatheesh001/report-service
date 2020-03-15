@@ -34,7 +34,7 @@ public class LabReportService {
 		return dao.getLabtestResultsForReport(params);
 	}
 
-	public String getClinicReportFormat(String clinicId) {
+	public String getClinicReportFormat(Integer clinicId) {
 		return dao.getClinicReportFormat(clinicId);
 	}
 
@@ -74,7 +74,7 @@ public class LabReportService {
 		return dao.getReferDoctorById(setBean);
 	}
 
-	public RegistrationBean getClinicById(String clinic_id) {
+	public RegistrationBean getClinicById(Integer clinic_id) {
 		return dao.getClinicById(clinic_id);
 	}
 
@@ -84,12 +84,10 @@ public class LabReportService {
 	}
 
 	public String isDepartmentLab(Integer Department_id) {
-		// fetchValueWithSingleParam("department_setup", "dept_lab", "department_id", registrationBean.getDepartment_id(), null, null)
 		return dao.isDepartmentLab(Department_id);
 	}
 
-	public String getPathologistByOffice(Integer office_id) {
-		// common.fetchValueWithSingleParam("doctors_office", "doctors_id", "office_id", registrationBean.getOffice_id(), null, " doctors_office.lab_pathologist='Y'");
+	public Integer getPathologistByOffice(Integer office_id) {
 		return dao.getPathologistByOffice(office_id);
 	}
 

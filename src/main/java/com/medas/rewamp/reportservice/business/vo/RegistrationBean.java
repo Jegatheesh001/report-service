@@ -15,7 +15,8 @@ public class RegistrationBean {
 	private String antibiotic_name;
 	private String barcode_no;
 	private String clinic_email;
-	private String clinic_id;
+	private Integer clinic_id;
+	private String clinicId;
 	private String clinic_name;
 	private String closed_status;
 	private Integer consult_id;
@@ -60,9 +61,17 @@ public class RegistrationBean {
 		this.barcode_no = String.valueOf(barcode_no);
 	}
 	public void setPatient_ageweek(BigInteger patient_ageweek) {
-		this.patient_ageweek = patient_ageweek.intValue();
+		if(patient_ageweek != null)
+			this.patient_ageweek = patient_ageweek.intValue();
 	}
 	public void setPatient_agedays(BigInteger patient_agedays) {
-		this.patient_agedays = patient_agedays.intValue();
+		if(patient_agedays != null)
+			this.patient_agedays = patient_agedays.intValue();
+	}
+	public void setClinicId(String clinicId) {
+		if(clinicId != null) {
+			this.clinicId = clinicId;
+			setClinic_id(Integer.parseInt(clinicId));
+		}
 	}
 }

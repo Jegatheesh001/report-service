@@ -51,7 +51,9 @@ public interface LabQueryContstants {
 			"		test_setup.test_format, " + 
 			"       if(doctor_consult.refer_status='Y', doctor_consult.rdoctor_id, '') as rdoctor_id, " +
 			"		doctor_consult.file_no, " + 
-			"		doctor_consult.entered_date, " +
+			"		doctor_consult.entered_date, " + 
+			"		doctor_consult.office_id, " +
+			"		doctor_consult.department_id, " + 
 			"		insurance_provider.insurar_name " + 
 			"	from  " + 
 			"		test_details,new_registration,country_setup,doctors_setup,test_setup,doctor_consult " + 
@@ -75,4 +77,32 @@ public interface LabQueryContstants {
 			+ "	from test_details td " + "	where td.profile_id is not null and td.test_detailsid in (:testDetailsids) "
 			+ "	order by td.level";
 	String getReportClassForClinic = "select culture_report_class from labtest_incentive_clinic where clinic_id = :clinicId and test_id = :testId ";
+	String getTestBasicDetails = "select " + 
+	"		ts.test_id, ts.test_name, ts.profile_type, ts.culture_status, ts.single_test, ts.test_format, ts.report_format " + 
+	"	from test_setup ts " + 
+	"	where ts.test_id in (:profileIds) ";
+	String getLabtestDetailsForReportProfile = "select " + 
+	"		td.test_detailsid, ts.test_id, ts.test_name, td.consult_lab_test_id as consult_labtest_id, " + 
+	"		ts.culture_status, ts.test_format, ts.report_format, ts.single_test, td.profile_id, " + 
+	"		tc.category_id, tc.category_name,tc.category_order as categoryOrder, st.sample_id, st.sample_name as sample_type, td.forward_toauth as forward_status, " + 
+	"		td.remarks, tso.notes, ts.lis_test_code as test_code, td.verified_by as verified_by, td.enteredby as entered_by, td.lab_idno, " + 
+	"		td.closed_status, td.dispatch_status, td.reverse_authent as reverse_auth_status, td.print_status, " + 
+	"		td.sample_collect_date as collection_date, td.sample_received_date as accession_date, td.office_id, " + 
+	"		td.verified_date, td.printed_date, td.dispatch_date, is_iso as iso, is_dac as dac, is_cap as cap, is_jci as jci,tps.testorder as testOrder " + 
+	"	from  " + 
+	"		test_details td inner join test_setup ts on td.test_id = ts.test_id " + 
+	"			inner join test_setup_office tso on tso.test_id = ts.test_id and td.office_id = tso.office_id " + 
+	"			inner join test_category tc on tc.category_id = ts.category_id " + 
+	"			inner join test_sample_setup st on st.sample_id = ts.sample_id " + 
+	"			left join test_profile_setup tps on tps.profile_testid = td.test_id and tps.test_id=td.profile_id and tps.office_id=:officeId " + 
+	"	where test_detailsid in (:testDetailsids) " + 
+	"	group by td.test_detailsid " + 
+	"	order by tc.category_order, td.verified_by, st.sample_name,tps.testorder";
+	String getUserDetailByUserID = "select "
+			+ "user_id, user_label, user_license, user_desig, user_sign "
+			+ "from user_setup where user_id = :userId ";
+	String getPathologistByOffice = "select doctors_id from doctors_office where lab_pathologist='Y' and office_id = :officeId limit 1";
+	String isDepartmentLab = "select dept_lab from department_setup where department_id = :departmentId ";
+	String getReferDoctorById = "select rdoctor_name, clinic_id as clinicId from refer_doctors where rdoctor_id = :rdoctorId ";
+	String getClinicById = "select clinic_name, clinic_email from clinics_setup where clinic_id = :clinicId ";
 }

@@ -49,7 +49,7 @@ public class LabReportDaoImpl implements LabReportDao {
 	@Override
 	public List<LabReportData> getLabtestDetailsForReport(LabReportData params) {
 		return getSession().createNativeQuery(LabQueryContstants.getLabtestDetailsForReport)
-				.setParameter("testDetailsids", params.getTest_detailsids())
+				.setParameter("testDetailsids", params.getTestDetailsids())
 				.setResultTransformer(Transformers.aliasToBean(LabReportData.class)).getResultList();
 	}
 
@@ -57,7 +57,7 @@ public class LabReportDaoImpl implements LabReportDao {
 	public List<LabReportData> getLabtestResultsForReport(LabReportData param) {
 		StringBuilder queryBuilder = new StringBuilder(LabQueryContstants.getLabtestResultsForReport);
 		Map<String, Object> params = new HashMap<>();
-		params.put("testDetailsids", param.getTest_detailsids());
+		params.put("testDetailsids", param.getTestDetailsids());
 		if(param.getHide() != null) {
 			queryBuilder.append("and tr.is_hide = :hide ");
 			params.put("hide", param.getHide());
@@ -68,7 +68,7 @@ public class LabReportDaoImpl implements LabReportDao {
 	}
 
 	@Override
-	public String getClinicReportFormat(String clinicId) {
+	public String getClinicReportFormat(Integer clinicId) {
 		return (String) getSession().createNativeQuery(LabQueryContstants.getClinicReportFormat)
 				.setParameter("clinicId", clinicId).getSingleResult();
 	}
@@ -76,20 +76,23 @@ public class LabReportDaoImpl implements LabReportDao {
 	@Override
 	public List<LabReportData> getProfileTestsTree(LabReportData params) {
 		return getSession().createNativeQuery(LabQueryContstants.getProfileTestsTree)
-				.setParameter("testDetailsids", params.getTest_detailsids())
+				.setParameter("testDetailsids", params.getTestDetailsids())
 				.setResultTransformer(Transformers.aliasToBean(LabReportData.class)).getResultList();
 	}
 
 	@Override
 	public List<LabReportData> getTestBasicDetails(LabReportData params) {
-		// TODO Auto-generated method stub
-		return null;
+		return getSession().createNativeQuery(LabQueryContstants.getTestBasicDetails)
+				.setParameter("profileIds", params.getProfileIds())
+				.setResultTransformer(Transformers.aliasToBean(LabReportData.class)).getResultList();
 	}
 
 	@Override
 	public List<LabReportData> getLabtestDetailsForReportProfile(LabReportData params) {
-		// TODO Auto-generated method stub
-		return null;
+		return getSession().createNativeQuery(LabQueryContstants.getLabtestDetailsForReportProfile)
+				.setParameter("officeId", params.getOffice_id())
+				.setParameter("testDetailsids", params.getTestDetailsids())
+				.setResultTransformer(Transformers.aliasToBean(LabReportData.class)).getResultList();
 	}
 
 	@Override
@@ -100,8 +103,9 @@ public class LabReportDaoImpl implements LabReportDao {
 
 	@Override
 	public UserBean getUserDetailByUserID(String userId) {
-		// TODO Auto-generated method stub
-		return null;
+		return (UserBean) getSession().createNativeQuery(LabQueryContstants.getUserDetailByUserID)
+				.setParameter("userId", userId)
+				.setResultTransformer(Transformers.aliasToBean(UserBean.class)).getSingleResult();
 	}
 
 	@Override
@@ -126,14 +130,16 @@ public class LabReportDaoImpl implements LabReportDao {
 
 	@Override
 	public RegistrationBean getReferDoctorById(RegistrationBean setBean) {
-		// TODO Auto-generated method stub
-		return null;
+		return (RegistrationBean) getSession().createNativeQuery(LabQueryContstants.getReferDoctorById)
+				.setParameter("rdoctorId", setBean.getRdoctor_id())
+				.setResultTransformer(Transformers.aliasToBean(RegistrationBean.class)).getSingleResult();
 	}
 
 	@Override
-	public RegistrationBean getClinicById(String clinicId) {
-		// TODO Auto-generated method stub
-		return null;
+	public RegistrationBean getClinicById(Integer clinicId) {
+		return (RegistrationBean) getSession().createNativeQuery(LabQueryContstants.getClinicById)
+				.setParameter("clinicId", clinicId)
+				.setResultTransformer(Transformers.aliasToBean(RegistrationBean.class)).getSingleResult();
 	}
 
 	@Override
@@ -144,14 +150,14 @@ public class LabReportDaoImpl implements LabReportDao {
 
 	@Override
 	public String isDepartmentLab(Integer departmentId) {
-		// TODO Auto-generated method stub
-		return null;
+		return (String) getSession().createNativeQuery(LabQueryContstants.isDepartmentLab)
+				.setParameter("departmentId", departmentId).getSingleResult();
 	}
 
 	@Override
-	public String getPathologistByOffice(Integer officeId) {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer getPathologistByOffice(Integer officeId) {
+		return (Integer) getSession().createNativeQuery(LabQueryContstants.getPathologistByOffice)
+				.setParameter("officeId", officeId).getSingleResult();
 	}
 
 	@Override

@@ -1,7 +1,12 @@
 package com.medas.rewamp.reportservice.business.vo;
 
+import static com.medas.rewamp.reportservice.utils.StringUtils.isEmpty;
+
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.medas.rewamp.reportservice.utils.DateUtil;
 
@@ -13,12 +18,13 @@ import lombok.NoArgsConstructor;
 public class LabReportData {
 	private Integer office_id;
 	private Integer profile_id;
-	private String clinic_id;
+	private Integer clinic_id;
 	private Integer test_id;
 	private Integer test_order;
 	private String consult_id;
 	private Integer test_detailsid;
 	private String test_detailsids;
+	private List<Integer> testDetailsids;
 	
 	private Integer verified_by;
 	private String test_format;
@@ -47,6 +53,7 @@ public class LabReportData {
 	private String current_level;
 	private Integer profile_level;
 	private String profile_ids;
+	private List<Integer> profileIds;
 	private String report_format;
 	private BigInteger lab_idno;
 	
@@ -74,6 +81,9 @@ public class LabReportData {
 	private String test_code;
 	private String parameter_code;
 	private Integer param_mapping_id;
+	private String profile_type;
+	private Integer categoryOrder;
+	private Integer testOrder;
 
 	public boolean isHide() {
 		return "Y".equals(hide);
@@ -92,6 +102,18 @@ public class LabReportData {
 	}
 	public boolean isJci() {
 		return "Y".equals(jci);
+	}
+	public void setTest_detailsids(String test_detailsids) {
+		if(!isEmpty(test_detailsids)) {
+			this.test_detailsids = test_detailsids;
+			this.testDetailsids = Arrays.asList(test_detailsids.trim().split(",")).stream().map(Integer::parseInt).collect(Collectors.toList());
+		}
+	}
+	public void setProfile_ids(String profile_ids) {
+		if(!isEmpty(profile_ids)) {
+			this.profile_ids = profile_ids;
+			this.profileIds = Arrays.asList(profile_ids.trim().split(",")).stream().map(Integer::parseInt).collect(Collectors.toList());
+		}
 	}
 	public static String getFormatedDateTime(Date dateTime) {
 		return DateUtil.formatDate("5", dateTime);

@@ -18,7 +18,7 @@ public interface LabReportDao {
 
 	List<LabReportData> getLabtestResultsForReport(LabReportData params);
 
-	String getClinicReportFormat(String clinicId);
+	String getClinicReportFormat(Integer clinicId);
 
 	List<LabReportData> getProfileTestsTree(LabReportData params);
 
@@ -38,13 +38,13 @@ public interface LabReportDao {
 
 	RegistrationBean getReferDoctorById(RegistrationBean setBean);
 
-	RegistrationBean getClinicById(String clinicId);
+	RegistrationBean getClinicById(Integer clinicId);
 
 	String getMicroTestRemarks(String labIdno);
 
 	String isDepartmentLab(Integer departmentId);
 
-	String getPathologistByOffice(Integer officeId);
+	Integer getPathologistByOffice(Integer officeId);
 
 	List<RegistrationBean> getAllAbnormalResults(RegistrationBean abnormBean);
 
