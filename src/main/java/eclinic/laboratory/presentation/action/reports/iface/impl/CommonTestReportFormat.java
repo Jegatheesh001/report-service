@@ -197,7 +197,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 		cell.setVerticalAlignment(0);
 		blankdatatable.addCell(cell);
 
-		cell = getCellForReport(getPhrase(registrationBean.getPatient_age() + "/" + registrationBean.getSex(), FontFactory.getFont("Helvetica-Bold", 10.0F)), fixedLeading);
+		cell = getCellForReport(getPhrase(registrationBean.getPatientAge() + "/" + registrationBean.getSex(), FontFactory.getFont("Helvetica-Bold", 10.0F)), fixedLeading);
 		cell.setBorderColor(bordorWhite);
 		cell.setColspan(2);
 		cell.setHorizontalAlignment(0);

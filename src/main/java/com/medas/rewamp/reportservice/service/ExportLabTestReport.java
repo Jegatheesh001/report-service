@@ -50,12 +50,14 @@ import com.medas.rewamp.reportservice.utils.DateUtil;
 import com.medas.rewamp.reportservice.utils.ReportHolder;
 
 import eclinic.laboratory.presentation.action.reports.iface.impl.CommonCultureReportFormatTwo;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author jegatheesh.mageswaran<br>
 		   <b>Created</b> On Mar 14, 2020
  *
  */
+@Slf4j
 public class ExportLabTestReport implements PdfPageEvent {
 	
 	@Autowired
@@ -75,6 +77,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 		userDetails = new UserBean();
 		userDetails.setUser_id(reportParam.getUserId());
 		userDetails.setOffice_id(reportParam.getOfficeId());
+		format = null;
 
 		OfficeLetterHeadBean officeLetterHeadBean = reportService.getOfficeLetterHead(userDetails.getOffice_id());
 		ReportHolder.setAttribute("officeLetterHeadBean", officeLetterHeadBean);
@@ -230,7 +233,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 		getCurrentPageDetails(index, testList, true, groupCategory);
 		for (LabReportData test : testList) {
 			category = test.getCategory_id();
-			ReportHolder.setLastFormat(test.getTest_format());
+			ReportHolder.setTestFormat(test.getTest_format());
 			auth = test.getVerified_by() == null ? 0 : test.getVerified_by();
 			ReportHolder.setShowHeader(true);
 			// Condition check for page break
@@ -766,27 +769,25 @@ public class ExportLabTestReport implements PdfPageEvent {
 		registrationBean.setTestDetailsid(String.valueOf(testDetailsId));
 		try {
 			registrationBean = reportService.getTestDetailsById(registrationBean);
-			Integer age = 0; String dispAge = "";
-			if ((registrationBean.getPatient_age() != null) && (!registrationBean.getPatient_age().equals(""))
-					&& (!registrationBean.getPatient_age().equals("0"))) {
-				age = Integer.parseInt(registrationBean.getPatient_age()) * 365;
+			Integer age = 0; Integer days = 0; String dispAge = "";
+			if ((registrationBean.getPatient_age() != null) && (registrationBean.getPatient_age() != 0)) {
+				age = registrationBean.getPatient_age() * 365;
 				dispAge = registrationBean.getPatient_age() + " Yrs ";
 			}
-			if ((registrationBean.getPatient_agemonth() != null) && (!registrationBean.getPatient_agemonth().equals(""))
-					&& (!registrationBean.getPatient_agemonth().equals("0"))) {
-				age += Integer.parseInt(registrationBean.getPatient_agemonth()) * 30;
+			if ((registrationBean.getPatient_agemonth() != null) && (registrationBean.getPatient_agemonth() != 0)) {
+				age += registrationBean.getPatient_agemonth() * 30;
 				dispAge = dispAge+registrationBean.getPatient_agemonth() + " Month ";
 			}
-			if ((registrationBean.getPatient_ageweek() != null) && (!registrationBean.getPatient_ageweek().equals(""))
-					&& (!registrationBean.getPatient_ageweek().equals("null"))
-					&& (!registrationBean.getPatient_ageweek().equals("0"))) {
-				age += Integer.parseInt(registrationBean.getPatient_ageweek()) * 7;
+			if ((registrationBean.getPatient_ageweek() != null) && (registrationBean.getPatient_ageweek() != 0)) {
+				age += registrationBean.getPatient_ageweek() * 7;
+				days += registrationBean.getPatient_ageweek() * 7;
 			}
-			if ((registrationBean.getPatient_agedays() != null)
-					&& (!registrationBean.getPatient_agedays().trim().isEmpty())
-					&& (!registrationBean.getPatient_agedays().equals("null"))
-					&& (!registrationBean.getPatient_agedays().equals("0"))) {
-				age += Integer.parseInt(registrationBean.getPatient_agedays());
+			if ((registrationBean.getPatient_agedays() != null) && (registrationBean.getPatient_agedays() != 0)) {
+				age += registrationBean.getPatient_agedays();
+				days += registrationBean.getPatient_agedays();
+			}
+			if (days > 0) {
+				dispAge = dispAge + days + " Days";
 			}
 			RegistrationBean setBeanRef = null;
 			if ((registrationBean.getRefer_status().equals("Y")) && (registrationBean.getRdoctor_id() != null)) {
@@ -808,7 +809,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 					}
 				}
 			}
-			registrationBean.setPatient_age(dispAge);
+			registrationBean.setPatientAge(dispAge);
 			registrationBean.setAge(age);
 			ReportHolder.setAttribute("headerDetails", registrationBean);
 			ReportHolder.setAttribute("footerDetails", new LabReportData());
@@ -821,6 +822,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 			}
 			ReportHolder.setAttribute("pathologist", doc);
 		} catch (Exception e) {
+			log.error(e.getMessage(), e);
 		}
 	}
 
@@ -949,7 +951,8 @@ public class ExportLabTestReport implements PdfPageEvent {
 	public void onStartPage(PdfWriter arg0, Document document) {
 		try {
 			if (format != null) {
-				document.add(format.getHeaderTable());
+				PdfPTable headTable = format.getHeaderTable();
+				document.add(headTable);
 				// Printing header
 				if (ReportHolder.showHeader() && "1".equals(ReportHolder.getTestFormat())) {
 					document.add(format.getFormatOneHeader());

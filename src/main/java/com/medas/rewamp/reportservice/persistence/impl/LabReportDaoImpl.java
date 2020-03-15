@@ -61,9 +61,9 @@ public class LabReportDaoImpl implements LabReportDao {
 			queryBuilder.append("and tr.is_hide = :hide ");
 			params.put("hide", param.getHide());
 		}
-		Query query = getSession().createNativeQuery(queryBuilder.toString());
+		Query<?> query = getSession().createNativeQuery(queryBuilder.toString());
 		params.forEach(query::setParameter);
-		return query.setResultTransformer(Transformers.aliasToBean(LabReportData.class)).getResultList();
+		return (List<LabReportData>) query.setResultTransformer(Transformers.aliasToBean(LabReportData.class)).getResultList();
 	}
 
 	@Override
@@ -116,8 +116,9 @@ public class LabReportDaoImpl implements LabReportDao {
 
 	@Override
 	public RegistrationBean getTestDetailsById(RegistrationBean registrationBean) {
-		// TODO Auto-generated method stub
-		return null;
+		return (RegistrationBean) getSession().createNativeQuery(LabQueryContstants.getTestDetailsById)
+				.setParameter("testDetailsid", registrationBean.getTestDetailsid())
+				.setResultTransformer(Transformers.aliasToBean(RegistrationBean.class)).getSingleResult();
 	}
 
 	@Override
