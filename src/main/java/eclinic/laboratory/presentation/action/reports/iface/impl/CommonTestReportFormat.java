@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
@@ -43,6 +44,7 @@ import com.medas.rewamp.reportservice.utils.ReportHolder;
  *         Created on 2019-06-27
  *
  */
+@Component("CommonTestReportFormat")
 public class CommonTestReportFormat implements TestReportFormat {
 	
 	DecimalFormat df0 = new DecimalFormat("#########");
@@ -99,7 +101,8 @@ public class CommonTestReportFormat implements TestReportFormat {
 			img1 = Image.getInstance(fname);
 			img1.scalePercent(40);
 			img1.setAlignment(0);
-		} catch (Exception localException1) {
+		} catch (Exception bge) {
+			log.error(bge.getMessage(), bge);
 		}
 		if (img1 != null) {
 			cell = new PdfPCell(img1);

@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class BarcodePdf {
 	
-	@Value("path.barcode")
+	@Value("${app.path.barcode}")
 	private String barcodePath;
 	
 	public String generateBarCode(String barcodeData) throws Exception {

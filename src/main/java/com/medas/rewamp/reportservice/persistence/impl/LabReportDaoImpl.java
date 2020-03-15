@@ -42,6 +42,7 @@ public class LabReportDaoImpl implements LabReportDao {
 
 	@Override
 	public String getTestDetailsIdsByCriteria(LabReportData params) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -68,14 +69,15 @@ public class LabReportDaoImpl implements LabReportDao {
 
 	@Override
 	public String getClinicReportFormat(String clinicId) {
-		// TODO Auto-generated method stub
-		return null;
+		return (String) getSession().createNativeQuery(LabQueryContstants.getClinicReportFormat)
+				.setParameter("clinicId", clinicId).getSingleResult();
 	}
 
 	@Override
 	public List<LabReportData> getProfileTestsTree(LabReportData params) {
-		// TODO Auto-generated method stub
-		return null;
+		return getSession().createNativeQuery(LabQueryContstants.getProfileTestsTree)
+				.setParameter("testDetailsids", params.getTest_detailsids())
+				.setResultTransformer(Transformers.aliasToBean(LabReportData.class)).getResultList();
 	}
 
 	@Override
@@ -104,8 +106,9 @@ public class LabReportDaoImpl implements LabReportDao {
 
 	@Override
 	public String getReportClassForClinic(QueryParam param) {
-		// TODO Auto-generated method stub
-		return null;
+		return (String) getSession().createNativeQuery(LabQueryContstants.getReportClassForClinic)
+				.setParameter("clinicId", param.getOfficeId())
+				.setParameter("testId", param.getId()).getSingleResult();
 	}
 
 	@Override

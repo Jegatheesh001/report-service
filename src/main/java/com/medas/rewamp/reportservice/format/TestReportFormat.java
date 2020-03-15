@@ -2,8 +2,6 @@ package com.medas.rewamp.reportservice.format;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,8 +12,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.medas.rewamp.reportservice.business.vo.LabReportData;
-
-import eclinic.laboratory.presentation.action.reports.iface.impl.CommonTestReportFormat;
+import com.medas.rewamp.reportservice.utils.ReportInstance;
 
 /**
  * @author Jegatheesh <br>
@@ -67,18 +64,7 @@ public interface TestReportFormat {
 	
 	public PdfPTable getFooterTable() throws Exception;
 	
-	@SuppressWarnings("unchecked")
 	public static TestReportFormat getReportClass(String reportImplementationClass) {
-		TestReportFormat instance = null;
-		try {
-			Class<TestReportFormat> clazz = (Class<TestReportFormat>) Class.forName(reportImplementationClass);
-			instance = clazz.newInstance();
-		} catch (ClassNotFoundException | ClassCastException cnfe) {
-			log.error(cnfe.getMessage(), cnfe);
-			instance = new CommonTestReportFormat();
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
-		return instance;
+		return ReportInstance.getReportClass(reportImplementationClass);
 	}
 }

@@ -38,6 +38,7 @@ public interface LabQueryContstants {
 			"		new_registration.sex, " + 
 			"		doctors_setup.doctors_name, " + 
 			"		doctor_consult.barcode_no, " + 
+			"		test_details.lab_idno, " + 
 			"		doctor_consult.patient_age, " + 
 			"		doctor_consult.patient_agemonth, " + 
 			"		if(doctor_consult.patient_ageweek is null,0,doctor_consult.patient_ageweek) as patient_ageweek, " + 
@@ -60,19 +61,18 @@ public interface LabQueryContstants {
 			"			doctor_consult.rdoctor_id = refer_doctors.rdoctor_id " + 
 			"		and " + 
 			" 			refer_doctors.type='E' " + 
-			" 	left outer join  " + 
-			"		insurance_provider " + 
-			"	on " + 
-			"		doctor_consult.insurar_id=insurance_provider.insurar_id " + 
-			" 	where " + 
-			" 		new_registration.nationality=country_setup.country_id " + 
-			" 	and " + 
-			" 		test_details.op_number=new_registration.op_number " + 
-			" 	and " + 
-			" 		test_details.consult_id=doctor_consult.consult_id " + 
-			" 	and " + 
-			" 		doctor_consult.doctors_id=doctors_setup.doctors_id " + 
-			" 	and " + 
-			" 		test_setup.test_id=test_details.test_id "
+			" 	left outer join insurance_provider " + 
+			"	on doctor_consult.insurar_id=insurance_provider.insurar_id " + 
+			" 	where new_registration.nationality=country_setup.country_id " + 
+			" 	and test_details.op_number=new_registration.op_number " + 
+			" 	and test_details.consult_id=doctor_consult.consult_id " + 
+			" 	and doctor_consult.doctors_id=doctors_setup.doctors_id " + 
+			" 	and test_setup.test_id=test_details.test_id "
 			+ " and test_details.test_Detailsid=:testDetailsid ";
+	String getClinicReportFormat = "select clinic_report_format from clinics_setup where clinic_id = :clinicId ";
+	String getProfileTestsTree = "select "
+			+ "	td.consult_lab_test_id as consult_labtest_id, td.test_detailsid, td.profile_id, td.level as profile_level, td.profile_tree as current_level "
+			+ "	from test_details td " + "	where td.profile_id is not null and td.test_detailsid in (:testDetailsids) "
+			+ "	order by td.level";
+	String getReportClassForClinic = "select culture_report_class from labtest_incentive_clinic where clinic_id = :clinicId and test_id = :testId ";
 }

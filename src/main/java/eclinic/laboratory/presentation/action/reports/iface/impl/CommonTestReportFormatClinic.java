@@ -6,6 +6,8 @@ import static com.medas.rewamp.reportservice.utils.ItextPdfCellFactory.lineBreak
 
 import java.util.Date;
 
+import org.springframework.stereotype.Component;
+
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
@@ -23,6 +25,7 @@ import com.medas.rewamp.reportservice.utils.ReportHolder;
  *         Created on 2019-07-21
  *
  */
+@Component("CommonTestReportFormatClinic")
 public class CommonTestReportFormatClinic extends CommonTestReportFormat implements TestReportFormat {
 	@Override
 	public PdfPTable getFooterTable() throws Exception {

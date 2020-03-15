@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
@@ -21,6 +22,7 @@ import com.medas.rewamp.reportservice.format.CultureReportFormat;
 import com.medas.rewamp.reportservice.service.LabReportService;
 import com.medas.rewamp.reportservice.utils.ItextPdfCellFactory;
 
+@Component("CommonCultureReportFormatTwo")
 public class CommonCultureReportFormatTwo  implements CultureReportFormat {
 	
 	@Autowired

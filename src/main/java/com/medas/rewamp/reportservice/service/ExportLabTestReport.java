@@ -65,6 +65,8 @@ public class ExportLabTestReport implements PdfPageEvent {
 	
 	@Value("${app.path.attachments}")
 	private String uploadPath;
+	@Value("${app.path.image}")
+	private String imagePath;
 
 	static TestReportFormat format;
 	static CultureReportFormat cultureFormat;
@@ -82,6 +84,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 		OfficeLetterHeadBean officeLetterHeadBean = reportService.getOfficeLetterHead(userDetails.getOffice_id());
 		ReportHolder.setAttribute("officeLetterHeadBean", officeLetterHeadBean);
 		ReportHolder.setAttribute("testDetailsIds", reportParam.getTestDetailsIds());
+		ReportHolder.setAttribute("imagePath", imagePath);
 
 		Document document = new Document(PageSize.A4, 15.0F, 15.0F, 5.0F, 215.0F);
 		String fileName = DateUtil.formatDate("8", new Date()) + ".pdf";

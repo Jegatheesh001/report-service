@@ -2,6 +2,7 @@ package com.medas.rewamp.reportservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @author jegatheesh.mageswaran<br>
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  */
 @SpringBootApplication
+@ComponentScan(basePackages = { "com.medas.rewamp.reportservice", "eclinic.laboratory.presentation.action.reports" })
 public class ReportServiceApplication {
 
 	public static void main(String[] args) {
