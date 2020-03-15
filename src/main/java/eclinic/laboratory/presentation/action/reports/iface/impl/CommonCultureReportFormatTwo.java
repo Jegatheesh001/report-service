@@ -171,7 +171,7 @@ public class CommonCultureReportFormatTwo  implements CultureReportFormat {
 			blankdatatable.addCell(cell);
 		}
 		
-		Map<String, RegistrationBean> antibioticMap = new LinkedHashMap<>();
+		Map<Integer, RegistrationBean> antibioticMap = new LinkedHashMap<>();
 		Map<String, RegistrationBean> orgAntibioticMap = new LinkedHashMap<>();
 		String key = null;
 		for (RegistrationBean setBean : list) {

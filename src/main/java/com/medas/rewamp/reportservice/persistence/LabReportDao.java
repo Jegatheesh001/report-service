@@ -56,4 +56,6 @@ public interface LabReportDao {
 
 	List<RegistrationBean> getOrganismNames(RegistrationBean regBean);
 
+	List<RegistrationBean> getAntibioticDetailsByCriteria(RegistrationBean organism);
+
 }

@@ -105,4 +105,32 @@ public interface LabQueryContstants {
 	String isDepartmentLab = "select dept_lab from department_setup where department_id = :departmentId ";
 	String getReferDoctorById = "select rdoctor_name, clinic_id as clinicId from refer_doctors where rdoctor_id = :rdoctorId ";
 	String getClinicById = "select clinic_name, clinic_email from clinics_setup where clinic_id = :clinicId ";
+	String getProfileOrderByTestDetails = "select  "
+			+ "		test_detailsid, testorder as test_order, profile_testid as test_id "
+			+ "	from test_details td inner join test_profile_setup pt on pt.profile_testid = td.test_id "
+			+ "	where pt.test_id = :profileId and test_detailsid in (:testDetailsids) " + "	group by test_detailsid "
+			+ "	order by testorder;";
+	String getAntibioAndOrganisms = "select " + 
+			"			antibiotic_setup.antibiotic_name, " + 
+			"			test_sensitivity.antibiotic_id, " + 
+			"			test_sensitivity.sensitivity, " + 
+			"			test_sensitivity.zone_of_inhibition, " + 
+			"			test_sensitivity.sensitivity_zone, " + 
+			"			test_sensitivity.intermediate_value, " + 
+			"   		test_organism.organism_id " + 
+			"   	from test_organism " + 
+			"      		inner join test_organism_setup on test_organism_setup.organism_id=test_organism.organism_id " + 
+			"      		left join test_sensitivity on test_sensitivity.test_organism_id=test_organism.id " + 
+			"      		left join antibiotic_setup on antibiotic_setup.antibiotic_id=test_sensitivity.antibiotic_id " + 
+			"		where test_organism.lab_idno = :labIdno and test_organism.test_id = :testId ";
+	String getOrganismNames = "select " + 
+	"			test_organism_setup.organism_name, " + 
+	"			test_organism.organism_id, " + 
+	"			test_organism.colonieus " + 
+	"	from " + 
+	"			test_organism_setup,test_organism " + 
+	"			left join test_sensitivity on test_organism.id = test_sensitivity.test_organism_id " + 
+	"	where test_organism.organism_id= test_organism_setup.organism_id " +
+	"		and test_organism.lab_idno = :labIdno and test_organism.test_id = :testId "
+	+ " group by test_organism_setup.organism_id ";
 }

@@ -11,6 +11,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.medas.rewamp.reportservice.business.vo.RegistrationBean;
+import com.medas.rewamp.reportservice.utils.ReportInstance;
 
 import eclinic.laboratory.presentation.action.reports.iface.impl.CommonCultureReportFormatTwo;
 
@@ -43,18 +44,7 @@ public interface CultureReportFormat {
 	public PdfPTable printRemarks(String remarks) throws Exception;
 	public PdfPTable getBlankLine(float fixedLeading) throws Exception;
 	
-	@SuppressWarnings("unchecked")
 	public static CultureReportFormat getReportClass(String reportImplementationClass) {
-		CultureReportFormat instance = null;
-		try {
-			Class<CultureReportFormat> clazz = (Class<CultureReportFormat>) Class.forName(reportImplementationClass);
-			instance = clazz.newInstance();
-		} catch (ClassNotFoundException cnfe) {
-			log.error(cnfe.getMessage(), cnfe);
-			instance = new CommonCultureReportFormatTwo();
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
-		return instance;
+		return ReportInstance.getCultureReportClass(reportImplementationClass);
 	}
 }

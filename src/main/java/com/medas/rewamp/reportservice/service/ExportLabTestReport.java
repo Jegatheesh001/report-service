@@ -87,7 +87,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 		ReportHolder.setAttribute("imagePath", imagePath);
 
 		Document document = new Document(PageSize.A4, 15.0F, 15.0F, 5.0F, 215.0F);
-		String fileName = DateUtil.formatDate("8", new Date()) + ".pdf";
+		String fileName = DateUtil.formatDate("8", new Date()) + "_" + reportParam.getUserId() + ".pdf";
 		String filePath = uploadPath + fileName;
 		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
 		writer.setPageEvent(new ExportLabTestReport());
@@ -699,6 +699,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 				}
 			}
 		} catch (Exception e) {
+			log.error(e.getMessage(), e);
 		}
 	}
 
@@ -715,7 +716,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 		param.setId(test.getTest_id());
 		param.setOfficeId(header.getClinic_id());
 		String impl = reportService.getReportClassForClinic(param);
-		return impl == null ? new CommonCultureReportFormatTwo() : CultureReportFormat.getReportClass(impl);
+		return CultureReportFormat.getReportClass(impl);
 	}
 
 	/**

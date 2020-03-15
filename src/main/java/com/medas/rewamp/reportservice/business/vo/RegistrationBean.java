@@ -11,7 +11,7 @@ public class RegistrationBean {
 	private Integer age;
 	private Integer department_id;
 	private Integer office_id;
-	private String antibiotic_id;
+	private Integer antibiotic_id;
 	private String antibiotic_name;
 	private String barcode_no;
 	private String clinic_email;
@@ -33,7 +33,7 @@ public class RegistrationBean {
 	private String measure;
 	private String normalValue;
 	private String op_number;
-	private String organism_id;
+	private Integer organism_id;
 	private String organism_name;
 	private String patientAge;
 	private Integer patient_age;
@@ -53,6 +53,10 @@ public class RegistrationBean {
 	private String testResult;
 	private String test_Result;
 	private String test_format;
+	
+	private String zone_of_inhibition;
+	private String sensitivity_zone;
+	private String intermediate_value;
 	
 	public void setLab_idno(BigInteger lab_idno) {
 		this.lab_idno = String.valueOf(lab_idno);

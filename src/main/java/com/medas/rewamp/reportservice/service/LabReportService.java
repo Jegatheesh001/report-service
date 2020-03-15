@@ -111,4 +111,8 @@ public class LabReportService {
 		return dao.getOrganismNames(regBean);
 	}
 
+	public List<RegistrationBean> getAntibioticDetailsByCriteria(RegistrationBean organism) {
+		return dao.getAntibioticDetailsByCriteria(organism);
+	}
+
 }

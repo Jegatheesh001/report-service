@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import com.medas.rewamp.reportservice.format.CultureReportFormat;
 import com.medas.rewamp.reportservice.format.TestReportFormat;
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,18 @@ public class ReportInstance {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			object = context.getBean("CommonTestReportFormat", TestReportFormat.class);
+		}
+		return object;
+	}
+	public static CultureReportFormat getCultureReportClass(String reportImplementationClass) {
+		CultureReportFormat object = null;
+		try {
+			@SuppressWarnings("unchecked")
+			Class<CultureReportFormat> clazz = (Class<CultureReportFormat>) Class.forName(reportImplementationClass);
+			object = context.getBean(clazz.getSimpleName(), CultureReportFormat.class);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			object = context.getBean("CommonCultureReportFormatTwo", CultureReportFormat.class);
 		}
 		return object;
 	}

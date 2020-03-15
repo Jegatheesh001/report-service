@@ -97,8 +97,10 @@ public class LabReportDaoImpl implements LabReportDao {
 
 	@Override
 	public List<LabReportData> getProfileOrderByTestDetails(LabReportData params) {
-		// TODO Auto-generated method stub
-		return null;
+		return getSession().createNativeQuery(LabQueryContstants.getProfileOrderByTestDetails)
+				.setParameter("profileId", params.getProfile_id())
+				.setParameter("testDetailsids", params.getTestDetailsids())
+				.setResultTransformer(Transformers.aliasToBean(LabReportData.class)).getResultList();
 	}
 
 	@Override
@@ -117,8 +119,10 @@ public class LabReportDaoImpl implements LabReportDao {
 
 	@Override
 	public List<RegistrationBean> getAntibioAndOrganisms(RegistrationBean registrationBean) {
-		// TODO Auto-generated method stub
-		return null;
+		return getSession().createNativeQuery(LabQueryContstants.getAntibioAndOrganisms)
+				.setParameter("labIdno", registrationBean.getLab_idno())
+				.setParameter("testId", registrationBean.getTestId())
+				.setResultTransformer(Transformers.aliasToBean(RegistrationBean.class)).getResultList();
 	}
 
 	@Override
@@ -186,6 +190,14 @@ public class LabReportDaoImpl implements LabReportDao {
 
 	@Override
 	public List<RegistrationBean> getOrganismNames(RegistrationBean regBean) {
+		return getSession().createNativeQuery(LabQueryContstants.getOrganismNames)
+				.setParameter("labIdno", regBean.getLab_idno())
+				.setParameter("testId", regBean.getTestId())
+				.setResultTransformer(Transformers.aliasToBean(RegistrationBean.class)).getResultList();
+	}
+
+	@Override
+	public List<RegistrationBean> getAntibioticDetailsByCriteria(RegistrationBean organism) {
 		// TODO Auto-generated method stub
 		return null;
 	}
