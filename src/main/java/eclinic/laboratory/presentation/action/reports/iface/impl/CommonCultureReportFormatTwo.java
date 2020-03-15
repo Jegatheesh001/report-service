@@ -91,12 +91,53 @@ public class CommonCultureReportFormatTwo  implements CultureReportFormat {
 
 		list.forEach(result -> {
 			blankdatatable.addCell(ItextPdfCellFactory.getCell(result.getTestName(), HELVETICA_BOLD_9, alignLeft, bordorWhite, 1));
-			blankdatatable.addCell(ItextPdfCellFactory.getCell(result.getTestResult(), HELVETICA_9, alignLeft, bordorWhite, 1));
+			blankdatatable.addCell(ItextPdfCellFactory.getCell(result.getTestResult(), abnormalDataCheck(result.getTestResult(), result) ? HELVETICA_BOLD_RED : HELVETICA_9, alignLeft, bordorWhite, 1));
 			blankdatatable.addCell(ItextPdfCellFactory.getCell(result.getMeasure(), HELVETICA_9, alignLeft, bordorWhite, 1));
 			blankdatatable.addCell(ItextPdfCellFactory.getCell(result.getNormalValue(), HELVETICA_9, alignLeft, bordorWhite, 1));
 		});
 		return blankdatatable;
 	}
+	
+	private boolean abnormalDataCheck(String testResult, RegistrationBean result) {
+		boolean abnormal = false;
+		try {
+			String abnormalResult = null;
+			RegistrationBean abnormBean = new RegistrationBean();
+			abnormBean.setLis_test_code(result.getLis_test_code());
+			abnormBean.setLis_parameter_code(result.getLis_parameter_code());
+
+			List<RegistrationBean> abnormalTestList = reportService.getAllAbnormalResults(abnormBean);
+			if (abnormalTestList != null && !abnormalTestList.isEmpty()) {
+				for (RegistrationBean regBean1 : abnormalTestList) {
+					abnormalResult = regBean1.getTest_Result();
+					if (abnormalResult != null && testResult != null) {
+						boolean abnormalResults = abnormalResult.contains("-");
+						boolean testResults = testResult.contains("-");
+
+						if (abnormalResults && testResults) {
+							String[] abnormalRange = abnormalResult.split("-");
+							String[] testResultRange = testResult.split("-");
+
+							if (((Double.parseDouble(testResultRange[0].trim()) > Double
+									.parseDouble(abnormalRange[0].trim()))
+									&& (Double.parseDouble(testResultRange[1].trim()) > Double
+											.parseDouble(abnormalRange[1].trim())))) {
+								abnormal = true;
+							}
+
+						} else {
+							if (abnormalResult != null && abnormalResult.equalsIgnoreCase(testResult)) {
+								abnormal = true;
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+		}
+		return abnormal;
+	}
+
 
 	/**
 	 * For printing profile name

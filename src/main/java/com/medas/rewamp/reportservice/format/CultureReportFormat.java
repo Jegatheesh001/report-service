@@ -13,8 +13,6 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.medas.rewamp.reportservice.business.vo.RegistrationBean;
 import com.medas.rewamp.reportservice.utils.ReportInstance;
 
-import eclinic.laboratory.presentation.action.reports.iface.impl.CommonCultureReportFormatTwo;
-
 public interface CultureReportFormat {
 	
 	public Logger log = LoggerFactory.getLogger(CultureReportFormat.class);
@@ -32,6 +30,7 @@ public interface CultureReportFormat {
 	Font HELVETICA_BOLD_9 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, normalBold);
 	Font HELVETICA_9 = FontFactory.getFont(FontFactory.HELVETICA, 9);
 	Font HELVETICA_5= FontFactory.getFont(FontFactory.HELVETICA, 5);
+	Font HELVETICA_BOLD_RED = FontFactory.getFont(FontFactory.HELVETICA_BOLD, normalBold,BaseColor.RED);
 	
 	int alignLeft = Element.ALIGN_LEFT, alignRight = Element.ALIGN_RIGHT, alignCenter = Element.ALIGN_CENTER;
 	
@@ -44,7 +43,7 @@ public interface CultureReportFormat {
 	public PdfPTable printRemarks(String remarks) throws Exception;
 	public PdfPTable getBlankLine(float fixedLeading) throws Exception;
 	
-	public static CultureReportFormat getReportClass(String reportImplementationClass) {
-		return ReportInstance.getCultureReportClass(reportImplementationClass);
+	public static CultureReportFormat getReportClass(String className) {
+		return ReportInstance.getCultureReportClass(className == null ? "eclinic.laboratory.presentation.action.reports.iface.impl.CommonCultureReportFormatTwo" : className);
 	}
 }

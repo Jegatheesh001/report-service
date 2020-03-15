@@ -49,7 +49,6 @@ import com.medas.rewamp.reportservice.format.TestReportFormat;
 import com.medas.rewamp.reportservice.utils.DateUtil;
 import com.medas.rewamp.reportservice.utils.ReportHolder;
 
-import eclinic.laboratory.presentation.action.reports.iface.impl.CommonCultureReportFormatTwo;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -68,9 +67,6 @@ public class ExportLabTestReport implements PdfPageEvent {
 	@Value("${app.path.image}")
 	private String imagePath;
 
-	static TestReportFormat format;
-	static CultureReportFormat cultureFormat;
-
 	private UserBean userDetails;
 	private Map<Integer, List<LabReportData>> testwiseData = null;
 	private Map<Integer, LabReportData> testDetailsMap = null;
@@ -79,7 +75,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 		userDetails = new UserBean();
 		userDetails.setUser_id(reportParam.getUserId());
 		userDetails.setOffice_id(reportParam.getOfficeId());
-		format = null;
+		ReportHolder.setFormat(null);
 
 		OfficeLetterHeadBean officeLetterHeadBean = reportService.getOfficeLetterHead(userDetails.getOffice_id());
 		ReportHolder.setAttribute("officeLetterHeadBean", officeLetterHeadBean);
@@ -114,7 +110,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 				getReportForTest(document, writer);
 				index++;
 				if (index != consultIdArr.length) {
-					format = null;
+					ReportHolder.setFormat(null);
 					documentBreak(document);
 				}
 			}
@@ -158,13 +154,14 @@ public class ExportLabTestReport implements PdfPageEvent {
 			officeLetterHeadBean = officeMap.get(office_id);
 		}
 		ReportHolder.setAttribute("officeLetterHeadBean", officeLetterHeadBean);
-		format = TestReportFormat.getReportClass(officeLetterHeadBean.getReport_class());
+		TestReportFormat format = TestReportFormat.getReportClass(officeLetterHeadBean.getReport_class());
 		Integer clinicId = testList.get(0).getClinic_id();
 		if (clinicId != null && clinicId != 0) {
 			String clinicReportFormat = reportService.getClinicReportFormat(clinicId);
 			if (clinicReportFormat != null && !clinicReportFormat.equals(""))
 				format = TestReportFormat.getReportClass(clinicReportFormat);
 		}
+		ReportHolder.setFormat(format);
 		
 		// Filtering normal and profile tests
 		List<LabReportData> nonProfileTestList = testList.stream().filter(e -> e.getProfile_id() == null).collect(Collectors.toList());
@@ -228,6 +225,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 		Integer lastCategory = 0,  category = 0;
 		ReportHolder.setLastFormat(null);
 		ReportHolder.setTestFormat(null);
+		TestReportFormat format = ReportHolder.getFormat();
 		Integer lastAuth = null,  auth = null;
 		boolean newPage = false, resultExist = false;
 		PdfPTable temp = null;
@@ -557,6 +555,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 		testList = testLevelMap.get(key);
 		boolean culture = false, groupCategory = true;
 		
+		TestReportFormat format = ReportHolder.getFormat();
 		// Normal Tests
 		if (profileDetails != null && testList != null) {
 			culture = "Y".equals(profileDetails.getCulture_status());
@@ -621,7 +620,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 	private void getCultureTestData(Document document, LabReportData test) {
 		try {
 			RegistrationBean registrationBean = new RegistrationBean();
-			cultureFormat = new CommonCultureReportFormatTwo();
+			CultureReportFormat cultureFormat = CultureReportFormat.getReportClass(null);
 			// Non profile Culture test logic
 			registrationBean.setLab_idno(test.getLab_idno());
 			registrationBean.setTestId(test.getTest_id().toString());
@@ -651,9 +650,10 @@ public class ExportLabTestReport implements PdfPageEvent {
 	private void getCultureTestProfileData(Document document, PdfWriter writer, LabReportData profileTest,
 			List<LabReportData> testList) {
 		RegistrationBean header = ReportHolder.getAttribute("headerDetails", RegistrationBean.class);
+		TestReportFormat format = ReportHolder.getFormat();
 		try {
 			RegistrationBean registrationBean = new RegistrationBean();
-			cultureFormat = getCultureReportClass(header, profileTest);
+			CultureReportFormat cultureFormat = getCultureReportClass(header, profileTest);
 			// Printing Culture profile name
 			document.add(cultureFormat.printProfileName(profileTest.getTest_name()));
 
@@ -736,6 +736,8 @@ public class ExportLabTestReport implements PdfPageEvent {
 				regBean.setTestName(result.getParameter_name());
 				regBean.setTestResult(result.getTest_result());
 				regBean.setNormalValue(result.getNormal_value());
+				regBean.setLis_parameter_code(result.getParameter_code());
+				regBean.setLis_test_code(result.getTest_code());
 				regBeanList.add(regBean);
 			}
 		}
@@ -954,6 +956,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 	@Override
 	public void onStartPage(PdfWriter arg0, Document document) {
 		try {
+			TestReportFormat format = ReportHolder.getFormat();
 			if (format != null) {
 				PdfPTable headTable = format.getHeaderTable();
 				document.add(headTable);
@@ -971,6 +974,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 	public void onEndPage(PdfWriter writer, Document document) {
 		try {
 			setPageNumber(writer, document);
+			TestReportFormat format = ReportHolder.getFormat();
 			PdfPTable footerTable = format.getFooterTable();
 			if (footerTable != null) {
 				footerTable.setTotalWidth(100.0F);

@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import com.medas.rewamp.reportservice.format.TestReportFormat;
+
 /**
  * @author jegatheesh.mageswaran<br>
 		   <b>Created</b> On Mar 14, 2020
@@ -38,6 +40,12 @@ public class ReportHolder {
 	public static void setTestFormat(String testFormat) {
 		get().testFormat = testFormat;
 	}
+	public static TestReportFormat getFormat() {
+		return get().format;
+	}
+	public static void setFormat(TestReportFormat format) {
+		get().format = format;
+	}
 	public static boolean showHeader() {
 		return get().showHeader;
 	}
@@ -57,6 +65,7 @@ class ReportContext {
 	private Map<String, Object> properties = new HashMap<>();
 	String lastFormat = null;
 	String testFormat = null;
+	TestReportFormat format = null;
 	boolean showHeader = false;
 	public void setProperty(String key, Object value) {
 		properties.put(key, value);

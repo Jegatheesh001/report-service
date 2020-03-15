@@ -166,8 +166,10 @@ public class LabReportDaoImpl implements LabReportDao {
 
 	@Override
 	public List<RegistrationBean> getAllAbnormalResults(RegistrationBean abnormBean) {
-		// TODO Auto-generated method stub
-		return null;
+		return getSession().createNativeQuery(LabQueryContstants.getAllAbnormalResults)
+				.setParameter("lisTestCode", abnormBean.getLis_test_code())
+				.setParameter("lisParameterCode", abnormBean.getLis_parameter_code())
+				.setResultTransformer(Transformers.aliasToBean(RegistrationBean.class)).getResultList();
 	}
 
 	@Override

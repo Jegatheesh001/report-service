@@ -133,4 +133,8 @@ public interface LabQueryContstants {
 	"	where test_organism.organism_id= test_organism_setup.organism_id " +
 	"		and test_organism.lab_idno = :labIdno and test_organism.test_id = :testId "
 	+ " group by test_organism_setup.organism_id ";
+	String getAllAbnormalResults = "select " + 
+	"		lis_test_code, lis_parameter_code, test_Result " + 
+	" 	from test_results_abnormal " + 
+	" 	where test_results_abnormal.lis_test_code=:lisTestCode and test_results_abnormal.lis_parameter_code=:lisParameterCode ";
 }
