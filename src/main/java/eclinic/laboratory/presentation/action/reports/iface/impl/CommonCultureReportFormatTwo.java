@@ -113,20 +113,17 @@ public class CommonCultureReportFormatTwo  implements CultureReportFormat {
 					if (abnormalResult != null && testResult != null) {
 						boolean abnormalResults = abnormalResult.contains("-");
 						boolean testResults = testResult.contains("-");
-
 						if (abnormalResults && testResults) {
 							String[] abnormalRange = abnormalResult.split("-");
 							String[] testResultRange = testResult.split("-");
-
 							if (((Double.parseDouble(testResultRange[0].trim()) > Double
 									.parseDouble(abnormalRange[0].trim()))
 									&& (Double.parseDouble(testResultRange[1].trim()) > Double
 											.parseDouble(abnormalRange[1].trim())))) {
 								abnormal = true;
 							}
-
 						} else {
-							if (abnormalResult != null && abnormalResult.equalsIgnoreCase(testResult)) {
+							if (abnormalResult.equalsIgnoreCase(testResult)) {
 								abnormal = true;
 							}
 						}
@@ -134,6 +131,7 @@ public class CommonCultureReportFormatTwo  implements CultureReportFormat {
 				}
 			}
 		} catch (Exception e) {
+			log.error(e.getMessage(), e);
 		}
 		return abnormal;
 	}

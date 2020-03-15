@@ -79,7 +79,6 @@ public class LabReportService {
 	}
 
 	public String getMicroTestRemarks(String lab_idno) {
-		// fetchValueWithSingleParam("micro_test_remarks", "remarks", "lab_idno", lab_idno, null, null);
 		return dao.getMicroTestRemarks(lab_idno);
 	}
 

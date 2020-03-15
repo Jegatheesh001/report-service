@@ -13,12 +13,9 @@ import com.medas.rewamp.reportservice.format.CultureReportFormat;
 import com.medas.rewamp.reportservice.service.LabReportService;
 import com.medas.rewamp.reportservice.utils.ItextPdfCellFactory;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  *  Format for Culture Report (DML)
  */
-@Slf4j
 @Component("CommonCultureReportFormatDML")
 public class CommonCultureReportFormatDML extends CommonCultureReportFormatTwo implements CultureReportFormat {
 	

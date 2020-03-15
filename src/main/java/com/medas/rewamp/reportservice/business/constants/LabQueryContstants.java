@@ -137,4 +137,10 @@ public interface LabQueryContstants {
 	"		lis_test_code, lis_parameter_code, test_Result " + 
 	" 	from test_results_abnormal " + 
 	" 	where test_results_abnormal.lis_test_code=:lisTestCode and test_results_abnormal.lis_parameter_code=:lisParameterCode ";
+	String getMicroTestRemarks = "select remarks from micro_test_remarks where lab_idno = :labIdno limit 1";
+	String getReferenceRangeId = "select id from test_reference_range where param_mapping_id = :paramMappingId and from_period<=:age and to_period>=:age limit 1";
+	String getMappedResultsetGender = "select remarks from test_alt_resultset where normal_id = :referenceId limit 1";
+	String getMappedResultsetValue = "select alt_result from test_alt_resultset "
+			+ "where normal_id = :referenceId and sex=:sexType and 0+:result>=0+min_value and 0+:result<=0+max_value "
+			+ "limit 1";
 }

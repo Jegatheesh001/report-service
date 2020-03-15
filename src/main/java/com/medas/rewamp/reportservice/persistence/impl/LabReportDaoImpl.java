@@ -148,8 +148,8 @@ public class LabReportDaoImpl implements LabReportDao {
 
 	@Override
 	public String getMicroTestRemarks(String labIdno) {
-		// TODO Auto-generated method stub
-		return null;
+		return (String) getSession().createNativeQuery(LabQueryContstants.getMicroTestRemarks)
+				.setParameter("labIdno", labIdno).getSingleResult();
 	}
 
 	@Override
@@ -173,21 +173,23 @@ public class LabReportDaoImpl implements LabReportDao {
 	}
 
 	@Override
-	public String getReferenceRangeId(String valueOf, Integer age) {
-		// TODO Auto-generated method stub
-		return null;
+	public String getReferenceRangeId(String paramMappingId, Integer age) {
+		return (String) getSession().createNativeQuery(LabQueryContstants.getReferenceRangeId)
+				.setParameter("paramMappingId", paramMappingId)
+				.setParameter("age", age).getSingleResult();
 	}
 
 	@Override
 	public String getMappedResultsetGender(String referenceId) {
-		// TODO Auto-generated method stub
-		return null;
+		return (String) getSession().createNativeQuery(LabQueryContstants.getMappedResultsetGender)
+				.setParameter("referenceId", referenceId).getSingleResult();
 	}
 
 	@Override
 	public String getMappedResultsetValue(String referenceId, String sexType, Double result) {
-		// TODO Auto-generated method stub
-		return null;
+		return (String) getSession().createNativeQuery(LabQueryContstants.getMappedResultsetValue)
+				.setParameter("referenceId", referenceId).setParameter("sexType", sexType).setParameter("result", result)
+				.getSingleResult();
 	}
 
 	@Override

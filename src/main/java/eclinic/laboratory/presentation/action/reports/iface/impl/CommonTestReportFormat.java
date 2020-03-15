@@ -74,8 +74,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 		blankdatatable.setWidthPercentage(100f);
 		blankdatatable.setTotalWidth(100f);
 
-		String fname = path;
-		fname = path + officeLetterHeadBean.getReport_header_logo();
+		String fname = path + officeLetterHeadBean.getReport_header_logo();
 
 		PdfPCell cell = new PdfPCell();
 		try {
@@ -745,19 +744,19 @@ public class CommonTestReportFormat implements TestReportFormat {
 		RegistrationBean header = ReportHolder.getAttribute("headerDetails", RegistrationBean.class);
 		int age = header.getAge();
 		String sex = header.getSex();
-		String reference_id = reportService.getReferenceRangeId(String.valueOf(testResult.getParam_mapping_id()), age);
+		String referenceId = reportService.getReferenceRangeId(String.valueOf(testResult.getParam_mapping_id()), age);
 
 		Paragraph para = null;
-		if (reference_id != null) {
+		if (referenceId != null) {
 			String altres = null;
 			String sexType = null;
 			try {
 				Double result = Double.valueOf(testResult.getTest_result());
-				sexType = reportService.getMappedResultsetGender(reference_id);
+				sexType = reportService.getMappedResultsetGender(referenceId);
 				if (!"B".equals(sexType)) {
 					sexType = "Male".equals(sex) ? "M" : "F";
 				}
-				altres = reportService.getMappedResultsetValue(reference_id, sexType, result);
+				altres = reportService.getMappedResultsetValue(referenceId, sexType, result);
 				if (altres != null)
 					para = new Paragraph(" [" + altres + "]", FontFactory.getFont(FontFactory.HELVETICA_BOLD, font.getSize(), BaseColor.RED));
 			} catch (Exception e) {
