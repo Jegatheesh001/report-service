@@ -537,9 +537,9 @@ public class CommonTestReportFormat implements TestReportFormat {
 				continue;
 
 			if (testResult.getSingle_test() != null && testResult.getSingle_test().equals("Y") && !testResult.isDac())
-			  cell = getCellForReport(getPhrase("*"+testResult.getParameter_name(), FontFactory.getFont("Helvetica", fontSize)), fixedLeading);
+				cell = getCellForReport(getPhrase("*" + testResult.getParameter_name(), FontFactory.getFont("Helvetica-Bold", fontSize)), fixedLeading);
 			else
-			  cell = getCellForReport(getPhrase(testResult.getParameter_name(), FontFactory.getFont("Helvetica", fontSize)), fixedLeading); 
+				cell = getCellForReport(getPhrase(testResult.getParameter_name(), FontFactory.getFont("Helvetica-Bold", fontSize)), fixedLeading); 
 			//cell.setPaddingBottom(4);
 			cell.setBorder(0);
 			cell.setHorizontalAlignment(0);
