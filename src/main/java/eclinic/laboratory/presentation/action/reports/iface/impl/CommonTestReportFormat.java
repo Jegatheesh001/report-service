@@ -1038,6 +1038,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 		footerTable.addCell(contentCell);
 		
 		/************************************Third Section**************************************************************/
+		registrationBean.setDac(ReportHolder.getDacLogo() ? "Y" : "N");
 		PdfPTable accrTable = new PdfPTable(new float[] {15, 70, 15});
 		accrTable.setWidthPercentage(100f);
 		accrTable.setTotalWidth(100f);

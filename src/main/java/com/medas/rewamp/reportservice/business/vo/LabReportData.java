@@ -84,6 +84,7 @@ public class LabReportData {
 	private String profile_type;
 	private Integer categoryOrder;
 	private Integer testOrder;
+	private String page_split;
 
 	public boolean isHide() {
 		return "Y".equals(hide);

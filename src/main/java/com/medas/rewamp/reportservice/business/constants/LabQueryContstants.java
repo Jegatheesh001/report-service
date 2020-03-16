@@ -10,7 +10,7 @@ public interface LabQueryContstants {
 			+ "td.remarks, tso.notes, ts.lis_test_code as test_code, td.verified_by, td.enteredby as entered_by, td.lab_idno, "
 			+ "td.closed_status, td.dispatch_status, td.reverse_authent as reverse_auth_status, td.print_status, "
 			+ "td.sample_collect_date as collection_date, td.sample_received_date as accession_date, td.office_id, "
-			+ "td.verified_date, td.printed_date, td.dispatch_date, is_iso as iso, is_dac as dac, is_cap as cap, is_jci as jci "
+			+ "td.verified_date, td.printed_date, td.dispatch_date, is_iso as iso, is_dac as dac, is_cap as cap, is_jci as jci, page_split "
 			+ "from " + "test_details td " + "inner join doctor_consult dc on dc.consult_id=td.consult_id "
 			+ "inner join test_setup ts on td.test_id = ts.test_id "
 			+ "inner join test_setup_office tso on tso.test_id = ts.test_id and td.office_id = tso.office_id "

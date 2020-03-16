@@ -90,7 +90,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
 		writer.setPageEvent(new ExportLabTestReport());
 		LabReportResponse reportResponse = new LabReportResponse(filePath);
-		ReportHolder.setAttribute("reportResponse", reportResponse);
+		ReportHolder.setAttribute(LabConstants.REPORT_RESPONSE, reportResponse);
 
 		document.addAuthor("MEDAS");
 		document.addSubject("Lab report");
@@ -121,7 +121,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 		}
 		printReportEndMessage(document);
 		document.close();
-		reportResponse = ReportHolder.getAttribute("reportResponse", LabReportResponse.class);
+		reportResponse = ReportHolder.getAttribute(LabConstants.REPORT_RESPONSE, LabReportResponse.class);
 		ReportHolder.remove();
 		return reportResponse;
 	}
@@ -236,6 +236,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 		PdfPTable temp = null;
 		int index = 0;
 		List<LabReportData> testResults = null;
+		boolean tempDac = false;
 		getCurrentPageDetails(index, testList, true, groupCategory);
 		for (LabReportData test : testList) {
 			category = test.getCategory_id();
@@ -248,6 +249,9 @@ public class ExportLabTestReport implements PdfPageEvent {
 				lastCategory = 0;
 				ReportHolder.setLastFormat(null);
 				ReportHolder.setShowHeader(false);
+				if(tempDac) {
+					ReportHolder.setDacLogo(true);
+				}
 			}
 			if (ReportHolder.getLastFormat() != null && !ReportHolder.getTestFormat().equals(ReportHolder.getLastFormat())) {
 				newPage = true;
@@ -257,6 +261,9 @@ public class ExportLabTestReport implements PdfPageEvent {
 			if (lastAuth != null && !auth.equals(lastAuth)) {
 				newPage = true;
 				resultExist = false;
+			}
+			if(lastCategory != 0 && "Y".equals(test.getPage_split())) {
+				newPage = true;
 			}
 			// Header contents will be set before document break and footer contents after that
 			if (newPage) {
@@ -278,6 +285,9 @@ public class ExportLabTestReport implements PdfPageEvent {
 						document.add(temp);
 					}
 				}
+				if(test.isDac()) {
+					ReportHolder.setDacLogo(true);
+				}
 				// For single test
 				if ("N".equals(test.getSingle_test())) {
 					//document.add(format.getTestName(test.getTest_name()));
@@ -297,14 +307,20 @@ public class ExportLabTestReport implements PdfPageEvent {
 					}
 					// Printing Remarks and Notes
 					if (!isEmpty(test.getNotes())) {
+						if(test.isDac()) {
+							ReportHolder.setDacLogo(true);
+						}
 						format.setNotes(document, test.getNotes());
 					}
-					if (!isEmpty(test.getRemarks())) {
+					if (!isEmpty(test.getRemarks()) && !test.getRemarks().equals("null")) {
 						document.add(format.getRemarksTable(test.getRemarks()));
 					}
 				}
 				// Printing sample type
 				if (resultExist && printSampleTypePrecheck(index, testList, groupCategory)) {
+					if(test.isDac()) {
+						ReportHolder.setDacLogo(true);
+					}
 					document.add(format.getSampleType(test.getSample_type()));
 					resultExist = false;
 				}
@@ -319,6 +335,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 			lastCategory = category;
 			ReportHolder.setLastFormat(ReportHolder.getTestFormat());
 			lastAuth = auth;
+			tempDac = test.isDac();
 			index++;
 		}
 		return null;
@@ -482,8 +499,10 @@ public class ExportLabTestReport implements PdfPageEvent {
 		this.consultProfiles = consultProfiles.stream().map(e -> {
 			String[] temp = e.split("_");
 			LabReportData profile = profileMap.get(Integer.parseInt(temp[1]));
-			profile.setConsult_labtest_id(Integer.parseInt(temp[0]));
-			return profile;
+			LabReportData tempProfile = new LabReportData();
+			setTempProfileData(profile, tempProfile);
+			tempProfile.setConsult_labtest_id(Integer.parseInt(temp[0]));
+			return tempProfile;
 		}).collect(Collectors.toList());
 		
 		profileInProfileMap = new LinkedHashMap<>();
@@ -520,6 +539,17 @@ public class ExportLabTestReport implements PdfPageEvent {
 	private String getTestKey(LabReportData test) {
 		String tree = test.getCurrent_level().contains(",") ? test.getCurrent_level().replaceAll(",", "_") : test.getCurrent_level();
 		return test.getConsult_labtest_id() + "_" + tree;
+	}
+	
+	private void setTempProfileData(LabReportData profile, LabReportData tempProfile) {
+		tempProfile.setTest_id(profile.getTest_id());
+		tempProfile.setTest_name(profile.getTest_name());
+		tempProfile.setProfile_type(profile.getProfile_type());
+		tempProfile.setCulture_status(profile.getCulture_status());
+		tempProfile.setSingle_test(profile.getSingle_test());
+		tempProfile.setTest_format(profile.getTest_format());
+		tempProfile.setReport_format(profile.getReport_format());
+		tempProfile.setDac(profile.getDac());
 	}
 	
 	/**
@@ -641,6 +671,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 				document.add(cultureFormat.printOrganismAndAntibiotic(list, registrationBean));
 			}
 		} catch (Exception e) {
+			log.error(e.getMessage(), e);
 		}
 	}
 	
@@ -660,9 +691,12 @@ public class ExportLabTestReport implements PdfPageEvent {
 			RegistrationBean registrationBean = new RegistrationBean();
 			CultureReportFormat cultureFormat = getCultureReportClass(header, profileTest);
 			// Printing Culture profile name
-			document.add(cultureFormat.printProfileName(profileTest.getTest_name()));
+			if (profileTest.getDac() != null && profileTest.getDac().equals("N"))
+				document.add(cultureFormat.printProfileName("*" + profileTest.getTest_name()));
+			else
+				document.add(cultureFormat.printProfileName(profileTest.getTest_name()));
 
-			if (testList.size() > 0) {
+			if (!testList.isEmpty()) {
 				String lab_idno = String.valueOf(testList.get(0).getLab_idno());
 				testList = getProfileOrder(profileTest.getTest_id(), testList);
 				for (LabReportData test : testList) {
@@ -670,7 +704,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 					PdfPTable tableData = null;
 					// Printing test formats data for the test
 					if ("1".equals(test.getTest_format())) {
-						if ("Y".equals(test.getSingle_test())) {
+						if ("N".equals(test.getSingle_test())) {
 							tableData = cultureFormat.printFormatOneReport(testResultList, test.getTest_name());
 						} else {
 							tableData = cultureFormat.printFormatOneReport(testResultList, null);
@@ -683,7 +717,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 					registrationBean.setTestId(test.getTest_id().toString());
 					// printing test organism and antibiotics for the test
 					List<RegistrationBean> list = reportService.getAntibioAndOrganisms(registrationBean);
-					if (list != null && list.size() > 0) {
+					if (list != null && !list.isEmpty()) {
 						tableData = cultureFormat.getDataTable4AntibioAndOrganismNames(registrationBean);
 						if (tableData != null) {
 							document.add(cultureFormat.getBlankLine(1f));
@@ -695,6 +729,9 @@ public class ExportLabTestReport implements PdfPageEvent {
 					// Printing notes
 					if (!isEmpty(test.getNotes())) {
 						format.setNotes(document, test.getNotes());
+					}
+					if(test.isDac()) {
+						ReportHolder.setDacLogo(true);
 					}
 				}
 				// Printing culture profile remarks
@@ -741,6 +778,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 				regBean.setTestName(result.getParameter_name());
 				regBean.setTestResult(result.getTest_result());
 				regBean.setNormalValue(result.getNormal_value());
+				regBean.setDac(result.getDac());
 				regBean.setLis_parameter_code(result.getParameter_code());
 				regBean.setLis_test_code(result.getTest_code());
 				regBeanList.add(regBean);
@@ -776,13 +814,15 @@ public class ExportLabTestReport implements PdfPageEvent {
 	 * @param testDetailsId
 	 */
 	private void setHeaderInitialDetails(Integer testDetailsId) {
-		LabReportResponse reportResponse = ReportHolder.getAttribute("reportResponse", LabReportResponse.class);
+		LabReportResponse reportResponse = ReportHolder.getAttribute(LabConstants.REPORT_RESPONSE, LabReportResponse.class);
 		RegistrationBean registrationBean = new RegistrationBean();
 		registrationBean.setTestDetailsid(String.valueOf(testDetailsId));
 		try {
 			registrationBean = reportService.getTestDetailsById(registrationBean);
 			
-			Integer age = 0; Integer days = 0; String dispAge = "";
+			Integer age = 0;
+			Integer days = 0;
+			String dispAge = "";
 			if ((registrationBean.getPatient_age() != null) && (registrationBean.getPatient_age() != 0)) {
 				age = registrationBean.getPatient_age() * 365;
 				dispAge = registrationBean.getPatient_age() + " Yrs ";
@@ -968,6 +1008,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 	@Override
 	public void onStartPage(PdfWriter arg0, Document document) {
 		try {
+			ReportHolder.setDacLogo(false);
 			TestReportFormat format = ReportHolder.getFormat();
 			if (format != null) {
 				PdfPTable headTable = format.getHeaderTable();
@@ -988,6 +1029,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 			setPageNumber(writer, document);
 			TestReportFormat format = ReportHolder.getFormat();
 			PdfPTable footerTable = format.getFooterTable();
+			ReportHolder.setDacLogo(false);
 			if (footerTable != null) {
 				footerTable.setTotalWidth(100.0F);
 				footerTable.setTotalWidth(document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin());

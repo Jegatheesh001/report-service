@@ -48,6 +48,7 @@ public class RegistrationBean {
 	private String reverse_authent;
 	private String sensitivity;
 	private String sex;
+	private String dac;
 	private String testDetailsid;
 	private String testId;
 	private String testName;

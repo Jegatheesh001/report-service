@@ -9,4 +9,5 @@ public class LabConstants {
 	private LabConstants() { }
 
 	public static final String TEST_DETAILS_IDS = "testDetailsIds";
+	public static final String REPORT_RESPONSE = "reportResponse";
 }

@@ -52,6 +52,12 @@ public class ReportHolder {
 	public static void setShowHeader(boolean showHeader) {
 		get().showHeader = showHeader;
 	}
+	public static boolean getDacLogo() {
+		return get().dacLogo;
+	}
+	public static void setDacLogo(boolean dacLogo) {
+		get().dacLogo = dacLogo;
+	}
 	public static String getAttribute(String key) {
 		return (String) get().getProperty(key);
 	}
@@ -67,6 +73,7 @@ class ReportContext {
 	String testFormat = null;
 	TestReportFormat format = null;
 	boolean showHeader = false;
+	boolean dacLogo = false;
 	public void setProperty(String key, Object value) {
 		properties.put(key, value);
 	}
