@@ -38,7 +38,9 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEvent;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.medas.rewamp.reportservice.business.constants.LabConstants;
 import com.medas.rewamp.reportservice.business.vo.LabReportData;
+import com.medas.rewamp.reportservice.business.vo.LabReportResponse;
 import com.medas.rewamp.reportservice.business.vo.OfficeLetterHeadBean;
 import com.medas.rewamp.reportservice.business.vo.QueryParam;
 import com.medas.rewamp.reportservice.business.vo.RegistrationBean;
@@ -70,7 +72,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 	private UserBean userDetails;
 	private Map<Integer, List<LabReportData>> testwiseData = null;
 	private Map<Integer, LabReportData> testDetailsMap = null;
-	public String generateReport(ReportParam reportParam) throws Exception {
+	public LabReportResponse generateReport(ReportParam reportParam) throws Exception {
 		ReportHolder.initialize();
 		userDetails = new UserBean();
 		userDetails.setUser_id(reportParam.getUserId());
@@ -79,7 +81,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 
 		OfficeLetterHeadBean officeLetterHeadBean = reportService.getOfficeLetterHead(userDetails.getOffice_id());
 		ReportHolder.setAttribute("officeLetterHeadBean", officeLetterHeadBean);
-		ReportHolder.setAttribute("testDetailsIds", reportParam.getTestDetailsIds());
+		ReportHolder.setAttribute(LabConstants.TEST_DETAILS_IDS, reportParam.getTestDetailsIds());
 		ReportHolder.setAttribute("imagePath", imagePath);
 
 		Document document = new Document(PageSize.A4, 15.0F, 15.0F, 5.0F, 215.0F);
@@ -87,6 +89,8 @@ public class ExportLabTestReport implements PdfPageEvent {
 		String filePath = uploadPath + fileName;
 		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
 		writer.setPageEvent(new ExportLabTestReport());
+		LabReportResponse reportResponse = new LabReportResponse(filePath);
+		ReportHolder.setAttribute("reportResponse", reportResponse);
 
 		document.addAuthor("MEDAS");
 		document.addSubject("Lab report");
@@ -106,7 +110,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 			for (String consultId : consultIdArr) {
 				params.setConsult_id(consultId);
 				String testDetailsIds = reportService.getTestDetailsIdsByCriteria(params);
-				ReportHolder.setAttribute("testDetailsIds", testDetailsIds);
+				ReportHolder.setAttribute(LabConstants.TEST_DETAILS_IDS, testDetailsIds);
 				getReportForTest(document, writer);
 				index++;
 				if (index != consultIdArr.length) {
@@ -117,8 +121,9 @@ public class ExportLabTestReport implements PdfPageEvent {
 		}
 		printReportEndMessage(document);
 		document.close();
+		reportResponse = ReportHolder.getAttribute("reportResponse", LabReportResponse.class);
 		ReportHolder.remove();
-		return filePath;
+		return reportResponse;
 	}
 
 	/**
@@ -137,7 +142,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 		ReportHolder.setTestFormat(null);
 		consultProfiles = null;
 
-		String test_detailsids = ReportHolder.getAttribute("testDetailsIds");
+		String test_detailsids = ReportHolder.getAttribute(LabConstants.TEST_DETAILS_IDS);
 		LabReportData params = new LabReportData();
 		params.setTest_detailsids(test_detailsids);
 		params.setHide("N");
@@ -771,10 +776,12 @@ public class ExportLabTestReport implements PdfPageEvent {
 	 * @param testDetailsId
 	 */
 	private void setHeaderInitialDetails(Integer testDetailsId) {
+		LabReportResponse reportResponse = ReportHolder.getAttribute("reportResponse", LabReportResponse.class);
 		RegistrationBean registrationBean = new RegistrationBean();
 		registrationBean.setTestDetailsid(String.valueOf(testDetailsId));
 		try {
 			registrationBean = reportService.getTestDetailsById(registrationBean);
+			
 			Integer age = 0; Integer days = 0; String dispAge = "";
 			if ((registrationBean.getPatient_age() != null) && (registrationBean.getPatient_age() != 0)) {
 				age = registrationBean.getPatient_age() * 365;
@@ -817,6 +824,11 @@ public class ExportLabTestReport implements PdfPageEvent {
 			}
 			registrationBean.setPatientAge(dispAge);
 			registrationBean.setAge(age);
+			
+			reportResponse.setPatientName(registrationBean.getPatient_name());
+			reportResponse.setOpNumber(registrationBean.getOp_number());
+			reportResponse.setPatientMail(registrationBean.getPatient_email());
+			reportResponse.setMailTo(registrationBean.getMail_to());
 			ReportHolder.setAttribute("headerDetails", registrationBean);
 			ReportHolder.setAttribute("footerDetails", new LabReportData());
 			UserBean doc = null;

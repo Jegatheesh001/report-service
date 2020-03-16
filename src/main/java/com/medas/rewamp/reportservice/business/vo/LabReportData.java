@@ -116,6 +116,6 @@ public class LabReportData {
 		}
 	}
 	public static String getFormatedDateTime(Date dateTime) {
-		return DateUtil.formatDate("5", dateTime);
+		return DateUtil.formatDate("4", dateTime);
 	}
 }

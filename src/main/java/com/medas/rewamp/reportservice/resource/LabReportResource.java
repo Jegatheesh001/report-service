@@ -5,7 +5,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.medas.rewamp.reportservice.business.vo.ApiResponse;
+import com.medas.rewamp.reportservice.business.vo.LabReportResponse;
 import com.medas.rewamp.reportservice.business.vo.ReportParam;
+import com.medas.rewamp.reportservice.configuration.aspects.Loggable;
 import com.medas.rewamp.reportservice.service.ExportLabTestReport;
 
 /**
@@ -20,9 +23,10 @@ public class LabReportResource {
 	@Autowired
 	ExportLabTestReport exportLabReport;
 
+	@Loggable
 	@GetMapping("/generate")
-	public String generateReport(ReportParam reportParam) throws Exception {
-		return exportLabReport.generateReport(reportParam);
+	public ApiResponse<LabReportResponse> generateReport(ReportParam reportParam) throws Exception {
+		return new ApiResponse<>(exportLabReport.generateReport(reportParam));
 	}
 	
 }

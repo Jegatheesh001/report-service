@@ -54,6 +54,7 @@ public interface LabQueryContstants {
 			"		doctor_consult.entered_date, " + 
 			"		doctor_consult.office_id, " +
 			"		doctor_consult.department_id, " + 
+			"		new_registration.patient_email, " +
 			"		insurance_provider.insurar_name " + 
 			"	from  " + 
 			"		test_details,new_registration,country_setup,doctors_setup,test_setup,doctor_consult " + 

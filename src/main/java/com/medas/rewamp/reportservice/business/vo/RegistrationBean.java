@@ -40,6 +40,7 @@ public class RegistrationBean {
 	private Integer patient_agedays;
 	private Integer patient_agemonth;
 	private Integer patient_ageweek;
+	private String patient_email;
 	private String patient_name;
 	private String rdoctor_id;
 	private String rdoctor_name;
