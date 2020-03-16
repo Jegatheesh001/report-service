@@ -110,7 +110,7 @@ public interface LabQueryContstants {
 			+ "		test_detailsid, testorder as test_order, profile_testid as test_id "
 			+ "	from test_details td inner join test_profile_setup pt on pt.profile_testid = td.test_id "
 			+ "	where pt.test_id = :profileId and test_detailsid in (:testDetailsids) " + "	group by test_detailsid "
-			+ "	order by testorder;";
+			+ "	order by testorder ";
 	String getAntibioAndOrganisms = "select " + 
 			"			antibiotic_setup.antibiotic_name, " + 
 			"			test_sensitivity.antibiotic_id, " + 
@@ -123,7 +123,8 @@ public interface LabQueryContstants {
 			"      		inner join test_organism_setup on test_organism_setup.organism_id=test_organism.organism_id " + 
 			"      		left join test_sensitivity on test_sensitivity.test_organism_id=test_organism.id " + 
 			"      		left join antibiotic_setup on antibiotic_setup.antibiotic_id=test_sensitivity.antibiotic_id " + 
-			"		where test_organism.lab_idno = :labIdno and test_organism.test_id = :testId ";
+			"		where test_organism.lab_idno = :labIdno and test_organism.test_id = :testId " +
+			"		order by antibiotic_id, organism_id ";
 	String getOrganismNames = "select " + 
 	"			test_organism_setup.organism_name, " + 
 	"			test_organism.organism_id, " + 

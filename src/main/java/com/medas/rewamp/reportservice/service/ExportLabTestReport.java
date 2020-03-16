@@ -955,15 +955,15 @@ public class ExportLabTestReport implements PdfPageEvent {
 					isPrinted = false;
 				// Setting Authentication details
 				// Latest date
-				if (test.getCollection_date() != null && (collectedOn == null || test.getCollection_date().compareTo(collectedOn) > 0))
+				if (test.getCollection_date() != null && (collectedOn == null || test.getCollection_date().compareTo(collectedOn) < 0))
 					collectedOn = test.getCollection_date();
-				if (test.getAccession_date() != null && (receivedOn == null || test.getAccession_date().compareTo(receivedOn) > 0))
+				if (test.getAccession_date() != null && (receivedOn == null || test.getAccession_date().compareTo(receivedOn) < 0))
 					receivedOn = test.getAccession_date();
-				if (test.getVerified_date() != null && (authenticatedOn == null || test.getVerified_date().compareTo(authenticatedOn) > 0))
+				if (test.getVerified_date() != null && (authenticatedOn == null || test.getVerified_date().compareTo(authenticatedOn) < 0))
 					authenticatedOn = test.getVerified_date();
-				if (test.getDispatch_date() != null && (dispatchedOn == null || test.getDispatch_date().compareTo(dispatchedOn) > 0))
+				if (test.getDispatch_date() != null && (dispatchedOn == null || test.getDispatch_date().compareTo(dispatchedOn) < 0))
 					dispatchedOn = test.getDispatch_date();
-				if (test.getPrinted_date() != null && (printedOn == null || test.getPrinted_date().compareTo(printedOn) > 0))
+				if (test.getPrinted_date() != null && (printedOn == null || test.getPrinted_date().compareTo(printedOn) < 0))
 					printedOn = test.getPrinted_date();
 				// Last person
 				if (test.getEntered_by() != null && "Y".equals(test.getForward_status()))
