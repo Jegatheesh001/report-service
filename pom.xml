@@ -35,8 +35,8 @@
 			<version>${itext.version}</version>
 		</dependency>
 		<dependency>
-			<artifactId>com.barcodelib</artifactId>
-			<groupId>barcode</groupId>
+			<groupId>com.barcodelib</groupId>
+			<artifactId>barcode</artifactId>
 			<version>1.0</version>
 			<scope>system</scope>
 			<systemPath>${basedir}/src/main/resources/lib/barcode.jar</systemPath>
