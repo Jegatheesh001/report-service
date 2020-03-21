@@ -9,4 +9,5 @@ public class ReportParam {
 	private String testDetailsIds;
 	private String multiple; 
 	private String consultIds; 
+	private String filePrefix;
 }

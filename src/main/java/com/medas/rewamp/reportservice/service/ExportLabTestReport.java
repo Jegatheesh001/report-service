@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -68,6 +69,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 	private String uploadPath;
 	@Value("${app.path.image}")
 	private String imagePath;
+	private Random random = new Random();
 
 	private UserBean userDetails;
 	private Map<Integer, List<LabReportData>> testwiseData = null;
@@ -83,9 +85,22 @@ public class ExportLabTestReport implements PdfPageEvent {
 		ReportHolder.setAttribute("officeLetterHeadBean", officeLetterHeadBean);
 		ReportHolder.setAttribute(LabConstants.TEST_DETAILS_IDS, reportParam.getTestDetailsIds());
 		ReportHolder.setAttribute("imagePath", imagePath);
+		officeMap.put(userDetails.getOffice_id(), officeLetterHeadBean);
 
 		Document document = new Document(PageSize.A4, 15.0F, 15.0F, 5.0F, 215.0F);
-		String fileName = DateUtil.formatDate("8", new Date()) + "_" + reportParam.getUserId() + ".pdf";
+		StringBuilder fileNameBuilder = new StringBuilder();
+		if(reportParam.getFilePrefix() != null) {
+			fileNameBuilder.append(reportParam.getFilePrefix());
+			fileNameBuilder.append('_');
+		}
+		fileNameBuilder.append(DateUtil.formatDate("8", new Date()));
+		fileNameBuilder.append('_');
+		fileNameBuilder.append(String.format("%04d", random.nextInt(10000)));
+		fileNameBuilder.append('_');
+		fileNameBuilder.append(reportParam.getUserId());
+		fileNameBuilder.append(".pdf");
+		
+		String fileName =  fileNameBuilder.toString();
 		String filePath = uploadPath + fileName;
 		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
 		writer.setPageEvent(new ExportLabTestReport());
