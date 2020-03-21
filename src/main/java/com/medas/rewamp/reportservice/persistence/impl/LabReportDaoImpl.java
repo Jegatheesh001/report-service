@@ -20,6 +20,7 @@ import com.medas.rewamp.reportservice.business.vo.QueryParam;
 import com.medas.rewamp.reportservice.business.vo.RegistrationBean;
 import com.medas.rewamp.reportservice.business.vo.UserBean;
 import com.medas.rewamp.reportservice.persistence.LabReportDao;
+import com.medas.rewamp.reportservice.utils.QueryUtil;
 
 @SuppressWarnings({"unchecked", "deprecation"})
 @Repository
@@ -134,34 +135,32 @@ public class LabReportDaoImpl implements LabReportDao {
 
 	@Override
 	public RegistrationBean getReferDoctorById(RegistrationBean setBean) {
-		return (RegistrationBean) getSession().createNativeQuery(LabQueryContstants.getReferDoctorById)
-				.setParameter("rdoctorId", setBean.getRdoctor_id())
-				.setResultTransformer(Transformers.aliasToBean(RegistrationBean.class)).getSingleResult();
+		return QueryUtil.skipNREWithRT(getSession().createNativeQuery(LabQueryContstants.getReferDoctorById)
+				.setParameter("rdoctorId", setBean.getRdoctor_id()), RegistrationBean.class, null);
 	}
 
 	@Override
 	public RegistrationBean getClinicById(Integer clinicId) {
-		return (RegistrationBean) getSession().createNativeQuery(LabQueryContstants.getClinicById)
-				.setParameter("clinicId", clinicId)
-				.setResultTransformer(Transformers.aliasToBean(RegistrationBean.class)).getSingleResult();
+		return QueryUtil.skipNREWithRT(getSession().createNativeQuery(LabQueryContstants.getClinicById)
+				.setParameter("clinicId", clinicId), RegistrationBean.class, null);
 	}
 
 	@Override
 	public String getMicroTestRemarks(String labIdno) {
-		return (String) getSession().createNativeQuery(LabQueryContstants.getMicroTestRemarks)
-				.setParameter("labIdno", labIdno).getSingleResult();
+		return QueryUtil.skipNRE(getSession().createNativeQuery(LabQueryContstants.getMicroTestRemarks)
+				.setParameter("labIdno", labIdno), String.class, null);
 	}
 
 	@Override
 	public String isDepartmentLab(Integer departmentId) {
-		return (String) getSession().createNativeQuery(LabQueryContstants.isDepartmentLab)
-				.setParameter("departmentId", departmentId).getSingleResult();
+		return QueryUtil.skipNRE(getSession().createNativeQuery(LabQueryContstants.isDepartmentLab)
+				.setParameter("departmentId", departmentId), String.class, "N");
 	}
 
 	@Override
 	public Integer getPathologistByOffice(Integer officeId) {
-		return (Integer) getSession().createNativeQuery(LabQueryContstants.getPathologistByOffice)
-				.setParameter("officeId", officeId).getSingleResult();
+		return QueryUtil.skipNRE(getSession().createNativeQuery(LabQueryContstants.getPathologistByOffice)
+				.setParameter("officeId", officeId), Integer.class, null);
 	}
 
 	@Override
@@ -174,22 +173,22 @@ public class LabReportDaoImpl implements LabReportDao {
 
 	@Override
 	public String getReferenceRangeId(String paramMappingId, Integer age) {
-		return (String) getSession().createNativeQuery(LabQueryContstants.getReferenceRangeId)
+		return QueryUtil.skipNRE(getSession().createNativeQuery(LabQueryContstants.getReferenceRangeId)
 				.setParameter("paramMappingId", paramMappingId)
-				.setParameter("age", age).getSingleResult();
+				.setParameter("age", age), String.class, null);
 	}
 
 	@Override
 	public String getMappedResultsetGender(String referenceId) {
-		return (String) getSession().createNativeQuery(LabQueryContstants.getMappedResultsetGender)
-				.setParameter("referenceId", referenceId).getSingleResult();
+		return QueryUtil.skipNRE(getSession().createNativeQuery(LabQueryContstants.getMappedResultsetGender)
+				.setParameter("referenceId", referenceId), String.class, null);
 	}
 
 	@Override
 	public String getMappedResultsetValue(String referenceId, String sexType, Double result) {
-		return (String) getSession().createNativeQuery(LabQueryContstants.getMappedResultsetValue)
-				.setParameter("referenceId", referenceId).setParameter("sexType", sexType).setParameter("result", result)
-				.getSingleResult();
+		return QueryUtil.skipNRE(getSession().createNativeQuery(LabQueryContstants.getMappedResultsetValue)
+				.setParameter("referenceId", referenceId).setParameter("sexType", sexType).setParameter("result", result), 
+				String.class, null);
 	}
 
 	@Override
