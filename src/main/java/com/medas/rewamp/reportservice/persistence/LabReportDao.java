@@ -48,11 +48,11 @@ public interface LabReportDao {
 
 	List<RegistrationBean> getAllAbnormalResults(RegistrationBean abnormBean);
 
-	String getReferenceRangeId(String valueOf, Integer age);
+	Integer getReferenceRangeId(String valueOf, Integer age);
 
-	String getMappedResultsetGender(String referenceId);
+	String getMappedResultsetGender(Integer referenceId);
 
-	String getMappedResultsetValue(String referenceId, String sexType, Double result);
+	String getMappedResultsetValue(Integer referenceId, String sexType, Double result);
 
 	List<RegistrationBean> getOrganismNames(RegistrationBean regBean);
 

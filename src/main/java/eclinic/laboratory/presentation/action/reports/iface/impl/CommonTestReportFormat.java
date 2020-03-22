@@ -508,7 +508,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 			blankdatatable.setTotalWidth(100f);
 
 		} catch (DocumentException e) {
-			e.printStackTrace();
+			log.warn(e.getMessage());
 		}
 		return getFormatOneData(dataList, blankdatatable);
 	}
@@ -657,7 +657,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 					para.add(temp);
 				}
 			} catch (Exception ex) {
-				
+				log.error(ex.getMessage(), ex);
 			}
 		} else {
 			para = abnormalDataCheck(testResult, font);
@@ -686,12 +686,10 @@ public class CommonTestReportFormat implements TestReportFormat {
 			
 			RegistrationBean abnormBean = new RegistrationBean();
 			abnormBean.setLis_test_code(testResult.getTest_code());
-
 			abnormBean.setLis_parameter_code(testResult.getParameter_code());
-			
 			List<RegistrationBean> abnormalTestList = reportService.getAllAbnormalResults(abnormBean);
 			
-			if (abnormalTestList != null && abnormalTestList.size() > 0) {
+			if (abnormalTestList != null && !abnormalTestList.isEmpty()) {
 				for(RegistrationBean regBean1 : abnormalTestList) {
 					
 					abnormalResult = regBean1.getTest_Result();
@@ -728,6 +726,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 			}}
 			}
 		} catch (Exception e) {
+			log.error(e.getMessage(), e);
 		}
 		return para;
 	}
@@ -744,7 +743,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 		RegistrationBean header = ReportHolder.getAttribute("headerDetails", RegistrationBean.class);
 		int age = header.getAge();
 		String sex = header.getSex();
-		String referenceId = reportService.getReferenceRangeId(String.valueOf(testResult.getParam_mapping_id()), age);
+		Integer referenceId = reportService.getReferenceRangeId(String.valueOf(testResult.getParam_mapping_id()), age);
 
 		Paragraph para = null;
 		if (referenceId != null) {
@@ -760,6 +759,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 				if (altres != null)
 					para = new Paragraph(" [" + altres + "]", FontFactory.getFont(FontFactory.HELVETICA_BOLD, font.getSize(), BaseColor.RED));
 			} catch (Exception e) {
+				log.error(e.getMessage(), e);
 			}
 		}
 		return para;
@@ -774,7 +774,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 			blankdatatable.setWidthPercentage(100f);
 			blankdatatable.setTotalWidth(100f);
 		} catch (DocumentException e) {
-			e.printStackTrace();
+			log.warn(e.getMessage());
 		}
 		if (dataList == null) return blankdatatable;
 
@@ -889,6 +889,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 				img.setSpacingBefore(fixedLeading);
 				img.scalePercent(40.0F);
 			} catch (Exception ex) {
+				log.warn(ex.getMessage());
 			}
 		}
 		if (img != null) {
@@ -914,6 +915,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 				img.setSpacingBefore(fixedLeading);
 				img.scalePercent(40.0F);
 			} catch (Exception ex) {
+				log.warn(ex.getMessage());
 			}
 		}
 		if (img != null) {
@@ -1051,6 +1053,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 				img.setAlignment(0);
 				img.scalePercent(60.0F);
 			} catch (Exception ex) {
+				log.warn(ex.getMessage());
 			}
 			if (img != null) {
 				contentCell.addElement(img);
@@ -1077,6 +1080,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 			img.setAlignment(0);
 			img.scalePercent(45.0F);
 		} catch (Exception ex) {
+			log.warn(ex.getMessage());
 		}
 		if (img != null) {
 			contentCell.addElement(img);
@@ -1096,6 +1100,7 @@ public class CommonTestReportFormat implements TestReportFormat {
 				img.setAlignment(alignCenter);
 				img.scalePercent(60.0F);
 			} catch (Exception ex) {
+				log.warn(ex.getMessage());
 			}
 			if (img != null) {
 				contentCell.addElement(img);

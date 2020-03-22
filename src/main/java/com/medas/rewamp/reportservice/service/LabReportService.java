@@ -94,16 +94,16 @@ public class LabReportService {
 		return dao.getAllAbnormalResults(abnormBean);
 	}
 
-	public String getReferenceRangeId(String valueOf, Integer age) {
+	public Integer getReferenceRangeId(String valueOf, Integer age) {
 		return dao.getReferenceRangeId(valueOf, age);
 	}
 
-	public String getMappedResultsetGender(String reference_id) {
-		return dao.getMappedResultsetGender(reference_id);
+	public String getMappedResultsetGender(Integer referenceId) {
+		return dao.getMappedResultsetGender(referenceId);
 	}
 
-	public String getMappedResultsetValue(String reference_id, String sexType, Double result) {
-		return dao.getMappedResultsetValue(reference_id, sexType, result);
+	public String getMappedResultsetValue(Integer referenceId, String sexType, Double result) {
+		return dao.getMappedResultsetValue(referenceId, sexType, result);
 	}
 
 	public List<RegistrationBean> getOrganismNames(RegistrationBean regBean) {

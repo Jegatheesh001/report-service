@@ -165,27 +165,33 @@ public class LabReportDaoImpl implements LabReportDao {
 
 	@Override
 	public List<RegistrationBean> getAllAbnormalResults(RegistrationBean abnormBean) {
-		return getSession().createNativeQuery(LabQueryContstants.getAllAbnormalResults)
-				.setParameter("lisTestCode", abnormBean.getLis_test_code())
-				.setParameter("lisParameterCode", abnormBean.getLis_parameter_code())
-				.setResultTransformer(Transformers.aliasToBean(RegistrationBean.class)).getResultList();
+		StringBuilder queryBuilder = new StringBuilder(LabQueryContstants.getAllAbnormalResults);
+		Map<String, Object> params = new HashMap<>();
+		params.put("lisTestCode", abnormBean.getLis_test_code());
+		if(abnormBean.getLis_parameter_code() != null) {
+			queryBuilder.append("and test_results_abnormal.lis_parameter_code=:lisParameterCode ");
+			params.put("lisParameterCode", abnormBean.getLis_parameter_code());
+		}
+		Query<?> query = getSession().createNativeQuery(queryBuilder.toString());
+		params.forEach(query::setParameter);
+		return (List<RegistrationBean>) query.setResultTransformer(Transformers.aliasToBean(RegistrationBean.class)).getResultList();
 	}
 
 	@Override
-	public String getReferenceRangeId(String paramMappingId, Integer age) {
+	public Integer getReferenceRangeId(String paramMappingId, Integer age) {
 		return QueryUtil.skipNRE(getSession().createNativeQuery(LabQueryContstants.getReferenceRangeId)
 				.setParameter("paramMappingId", paramMappingId)
-				.setParameter("age", age), String.class, null);
+				.setParameter("age", age), Integer.class, null);
 	}
 
 	@Override
-	public String getMappedResultsetGender(String referenceId) {
+	public String getMappedResultsetGender(Integer referenceId) {
 		return QueryUtil.skipNRE(getSession().createNativeQuery(LabQueryContstants.getMappedResultsetGender)
 				.setParameter("referenceId", referenceId), String.class, null);
 	}
 
 	@Override
-	public String getMappedResultsetValue(String referenceId, String sexType, Double result) {
+	public String getMappedResultsetValue(Integer referenceId, String sexType, Double result) {
 		return QueryUtil.skipNRE(getSession().createNativeQuery(LabQueryContstants.getMappedResultsetValue)
 				.setParameter("referenceId", referenceId).setParameter("sexType", sexType).setParameter("result", result), 
 				String.class, null);
