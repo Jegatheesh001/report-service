@@ -1,6 +1,5 @@
 package com.medas.rewamp.reportservice.business.vo;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import lombok.Data;
@@ -20,7 +19,7 @@ public class ServiceVO {
 	private String insurar_icd_code;
 	private String Procedure_name;
 	private String Labtest_name;
-	private Integer Quantity;
+	private Integer quantity;
 	private String Procedure_type;
 	private String approval_status;
 	private Double appr_amt;
@@ -28,11 +27,19 @@ public class ServiceVO {
 	private String appr_no;
 	private Date approved_date;
 	private String appr_remarks;
-	private String Valid_upto;
+	private Date valid_upto;
 	private String Lab_type;
 	
-	public void setGross_amt(BigDecimal grossAmt) {
+	public void setGross_amt(Number grossAmt) {
 		if (grossAmt != null)
 			this.gross_amt = grossAmt.doubleValue();
+	}
+	public void setAppr_amt(Number appr_amt) {
+		if (appr_amt != null)
+			this.appr_amt = appr_amt.doubleValue();
+	}
+	public void setQuantity(Number quantity) {
+		if (quantity != null)
+			this.quantity = quantity.intValue();
 	}
 }

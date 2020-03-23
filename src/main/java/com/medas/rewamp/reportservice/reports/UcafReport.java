@@ -1496,8 +1496,8 @@ public class UcafReport {
 				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 				blankdatatable.addCell(cell);
 
-				if (null != preAppBean.getValid_upto() && !preAppBean.getValid_upto().equals("")) {
-					cell = new PdfPCell(new Phrase("Approval Validity : " + DateUtil.formatDate("2", DateUtil.parseDate("6", preAppBean.getValid_upto())), FontFactory.getFont(
+				if (null != preAppBean.getValid_upto()) {
+					cell = new PdfPCell(new Phrase("Approval Validity : " + DateUtil.formatDate("2", preAppBean.getValid_upto()), FontFactory.getFont(
 							FontFactory.HELVETICA, 8)));
 
 					cell.setBorderColor(BaseColor.WHITE);
@@ -1550,7 +1550,7 @@ public class UcafReport {
 				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 				blankdatatable.addCell(cell);
 
-				if (null != preAppBean.getApproved_date() && !preAppBean.getApproved_date().equals("")) {
+				if (null != preAppBean.getApproved_date()) {
 					cell = new PdfPCell(new Phrase("Date " + DateUtil.formatDate("2", preAppBean.getApproved_date()), FontFactory.getFont(
 							FontFactory.HELVETICA, 8)));
 					cell.setBorderColor(BaseColor.WHITE);
