@@ -60,8 +60,6 @@ public class LabTestReport {
 	@Autowired
 	private LabReportService reportService;
 	
-	@Value("${app.path.attachments}")
-	private String uploadPath;
 	@Value("${app.path.image}")
 	private String imagePath;
 

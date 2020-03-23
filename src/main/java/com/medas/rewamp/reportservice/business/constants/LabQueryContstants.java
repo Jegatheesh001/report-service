@@ -1,7 +1,10 @@
 package com.medas.rewamp.reportservice.business.constants;
 
 public interface LabQueryContstants {
-	String getOfficeLetterHead = "select " + "report_class," + "report_header_logo," + "report_footer_logo,"
+	String getOfficeLetterHead = "select office_Name as officeName, report_class," 
+			+ "if(phone_Numbers is null,'',phone_Numbers) as phoneNumbers," 
+			+ "if(fax_Numbers is null,'',fax_Numbers) as faxNumbers,"
+			+ "report_header_logo," + "report_footer_logo,"
 			+ "jci_logo," + "dac_logo " + "from " + "office_details where office_Id= :officeId ";
 	String getLabtestDetailsForReport = "select "
 			+ "dc.clinic_id,td.test_detailsid, ts.test_id, ts.test_name, td.consult_lab_test_id as consult_labtest_id, "

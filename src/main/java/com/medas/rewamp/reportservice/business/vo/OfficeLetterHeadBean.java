@@ -9,4 +9,7 @@ public class OfficeLetterHeadBean {
 	private String report_footer_logo;
 	private String jci_logo;
 	private String dac_logo;
+	private String officeName;
+	private String phoneNumbers;
+	private String faxNumbers;
 }

@@ -39,6 +39,7 @@ public class LabReportResource {
 		return new ApiResponse<>(exportLabReport.generateReport(reportParam));
 	}
 	
+	@Loggable
 	@CrossOrigin
 	@GetMapping(value = "/view", produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<InputStreamResource> htmlToPdf(ReportParam reportParam) throws Exception {

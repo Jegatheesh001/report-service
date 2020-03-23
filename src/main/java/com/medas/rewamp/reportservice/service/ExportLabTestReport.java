@@ -65,7 +65,7 @@ public class ExportLabTestReport implements PdfPageEvent {
 	@Autowired
 	private LabReportService reportService;
 	
-	@Value("${app.path.attachments}")
+	@Value("${app.path.labreports}")
 	private String uploadPath;
 	@Value("${app.path.image}")
 	private String imagePath;
